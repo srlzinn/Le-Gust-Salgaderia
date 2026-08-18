@@ -28,9 +28,9 @@
             </button>
             <nav class="nav-menu" id="navMenu">
                 <a href="#inicio" class="active">Início</a>
-                <a href="#cardapio">Cardápio</a>
+                <a href="delivery.html">Cardápio</a>
                 <a href="delivery.html">Delivery</a>
-                <a href="#encomendas">Encomendas</a>
+                <a href="delivery.html">Encomendas</a>
                 <a href="#contato">Contato</a>
             </nav>
         </div>
@@ -47,7 +47,7 @@
                     <a href="delivery.html" class="btn btn-primary btn-large">
                         🛵 FAZER PEDIDO
                     </a>
-                    <a href="#encomendas" class="btn btn-outline btn-large">
+                    <a href="delivery.html" class="btn btn-outline btn-large">
                         📋 FAZER ENCOMENDA
                     </a>
                     <a href="#" class="btn btn-whatsapp btn-large" id="heroAtendimento">
@@ -177,70 +177,74 @@
         </div>
     </section>
 
-    <!-- ===== CONTATO ===== -->
-    <section class="contato" id="contato">
-        <div class="container">
-            <span class="tag">Contato</span>
-            <h2>Fale com a gente</h2>
-            <p style="color:var(--muted); margin-bottom:32px;">Estamos aqui para te atender da melhor forma possível.</p>
-            <div class="contato-grid">
-                <div class="contato-info">
-                    <div class="info-item">
-                        <span class="info-icon">📍</span>
-                        <div>
-                            <strong>Endereço</strong>
-                            <p>R. São Benedito, 475 - Planalto<br />Parnaíba - PI, 64207-570</p>
-                            <a href="https://maps.app.goo.gl/LdfaBo8V6873L9gm6" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none; font-size:0.9rem;">
-                                📍 Ver no mapa
-                            </a>
-                        </div>
+<!-- ===== CONTATO ===== -->
+<section class="contato" id="contato">
+    <div class="container">
+        <span class="tag">Contato</span>
+        <h2>Fale com a gente</h2>
+        <p style="color:var(--muted); margin-bottom:48px; max-width:500px; text-align:center; margin-left:auto; margin-right:auto;">
+            Estamos aqui para te atender da melhor forma possível. Escolha o canal mais conveniente para você.
+        </p>
+        
+        <div class="contato-grid">
+            <!-- Informações de Contato -->
+            <div class="contato-info">
+                <!-- Endereço -->
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <div>
+                        <strong>Endereço</strong>
+                        <p>R. São Benedito, 475 - Planalto<br />Parnaíba - PI, 64207-570</p>
+                        <a href="https://maps.app.goo.gl/LdfaBo8V6873L9gm6" target="_blank" rel="noopener noreferrer" class="contato-link">
+                            📍 Ver no mapa
+                        </a>
                     </div>
-                    <div class="info-item">
-                        <span class="info-icon">🕐</span>
-                        <div>
-                            <strong>Horário de Funcionamento</strong>
-                            <p>Segunda a Sábado: 08:00–12:00 | 14:00–19:00<br />Domingo: Fechado</p>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">📱</span>
-                        <div>
-                            <strong>WhatsApp</strong>
-                            <p>(86) 98153-2377</p>
-                            <a href="#" id="contatoWhatsapp" style="color:var(--whatsapp); font-weight:700; text-decoration:none;">
-                                💬 Clique para falar conosco
-                            </a>
-                        </div>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-icon">📷</span>
-                        <div>
-                            <strong>Instagram</strong>
-                            <p>@legustsalgaderia</p>
-                            <a href="https://www.instagram.com/legustsalgaderia/" target="_blank" style="color:var(--primary); font-weight:700; text-decoration:none;">
-                                📷 Siga-nos no Instagram
-                            </a>
-                        </div>
-                    </div>
-                    <a href="#" class="btn btn-whatsapp btn-full" id="contatoWhatsapp2">
-                        💬 FALAR NO WHATSAPP
-                    </a>
                 </div>
-                <div class="mapa-container">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.5!2d-41.7762!3d-2.9077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7ecb0b9b2b2b2b2b%3A0x1234567890abcdef!2sR.+S%C3%A3o+Benedito,+475+-+Planalto,+Parna%C3%ADba+-+PI!5e0!3m2!1spt-BR!2sbr!4v1699999999999!5m2!1spt-BR!2sbr"
-                        width="100%"
-                        height="100%"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Localização da Le' Gust Salgaderia">
-                    </iframe>
+
+                <!-- Horário -->
+                <div class="info-item">
+                    <span class="info-icon">🕐</span>
+                    <div>
+                        <strong>Horário de Funcionamento</strong>
+                        <p>
+                            <span style="display:block;">Segunda a Sábado: <strong>08:00–12:00</strong> | <strong>14:00–19:00</strong></span>
+                            <span style="display:block; color:var(--muted); font-size:0.9rem;">Domingo: Fechado</span>
+                        </p>
+                    </div>
                 </div>
+
+                <!-- WhatsApp -->
+                <div class="info-item">
+                    <span class="info-icon">💬</span>
+                    <div>
+                        <strong>WhatsApp</strong>
+                        <p style="font-size:1.1rem; font-weight:700; color:var(--whatsapp);">(86) 98153-2377</p>
+                        <a href="#" id="contatoWhatsapp" class="contato-link whatsapp-link">
+                            💬 Clique para falar conosco
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Instagram -->
+                <div class="info-item">
+                    <span class="info-icon">📷</span>
+                    <div>
+                        <strong>Instagram</strong>
+                        <p style="font-size:1rem; font-weight:600;">@legustsalgaderia</p>
+                        <a href="https://www.instagram.com/legustsalgaderia/" target="_blank" rel="noopener noreferrer" class="contato-link">
+                            📷 Siga-nos no Instagram
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Botão WhatsApp em destaque -->
+                <a href="#" id="contatoWhatsapp2" class="btn btn-whatsapp btn-full" style="margin-top:12px;">
+                    💬 FALAR NO WHATSAPP
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">

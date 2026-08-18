@@ -1,21 +1,52 @@
-// ===== DADOS DOS PRODUTOS (ordem igual ao Anota.ai) =====
+// ===== CONFIGURAÇÃO DE AMBIENTE / FALLBACKS =====
+const CONFIG_ENV = window.CONFIG || {
+    whatsapp: "5586999999999", // Altere para o seu número de WhatsApp com DDD
+    endereco: "R. São Benedito, 475 - Planalto, Parnaíba - PI"
+};
+
+// ===== DADOS DOS PRODUTOS =====
 const produtos = [
-    { id: 1, nome: 'Bolinha de queijo 25 unidades', descricao: '25 unidades de salgados variados não disponibiliza escolha de sabores...', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 2, nome: 'Bolinha de carne seca 25 unidades', descricao: '25 unidades de carne seca variadas.', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 3, nome: 'Enroladinho de salsicha 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 4, nome: 'Mini churros de doce de leite 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 5, nome: 'Cigarrate de calabresa 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 6, nome: 'Coxinha de frango 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 7, nome: 'Mix Le\'gust 25 unidades', descricao: '25 unidades de salgados variados não disponibiliza escolha de sabores...', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 8, nome: 'Travesseiro de presunto e queijo 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 9, nome: 'Pastel de carne moída 25 unidades', descricao: '', lactose: 'Sem lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 10, nome: 'Quibe com queijo e catapiry 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 11, nome: 'Bolinho de carne moída 25 unidades', descricao: '', lactose: 'Contém Lactose', preco: '17,00', categoria: 'salgados' },
-    { id: 12, nome: 'Pacote de pão de queijo congelado com 50 unidades', descricao: '', lactose: 'Contém Lactose', preco: '30,00', categoria: 'congelados' }
+    { id: 1, nome: 'Pão de queijo com carne', descricao: 'Pacote com 25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🧀' },
+    { id: 2, nome: 'Pão de queijo congelado', descricao: 'Pacote com 25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'congelados', emoji: '🧊' },
+    { id: 3, nome: 'Porção Mix Le\'Gust', descricao: '25 unidades com sabores variados', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🎯' },
+    { id: 4, nome: 'Pastel de carne moída', descricao: '25 unidades', lactose: 'Sem lactose', preco: '20,00', categoria: 'salgados', emoji: '🥟' },
+    { id: 5, nome: 'Presunto e queijo', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🧈' },
+    { id: 6, nome: 'Salsicha', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🌭' },
+    { id: 7, nome: 'Mini churros com doce de leite', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🥨' },
+    { id: 8, nome: 'Queijo', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🧀' },
+    { id: 9, nome: 'Calabresa', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🌶️' },
+    { id: 10, nome: 'Carne moída', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🍖' },
+    { id: 11, nome: 'Coxinha de frango', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🍗' },
+    { id: 12, nome: 'Quibe com queijo e carne', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🧆' },
+    { id: 13, nome: 'Carne de sol', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'salgados', emoji: '🥩' },
+    { id: 14, nome: 'Pão de queijo congelado', descricao: '25 unidades', lactose: 'Contém Lactose', preco: '20,00', categoria: 'congelados', emoji: '🧊' },
+    { id: 15, nome: 'Pão de queijo congelado', descricao: '50 unidades', lactose: 'Contém Lactose', preco: '35,00', categoria: 'congelados', emoji: '🧊' },
+    { id: 16, nome: 'Guaraná Antarctica tradicional', descricao: '1 litro', lactose: '', preco: '8,00', categoria: 'bebidas', emoji: '🥤' },
+    { id: 17, nome: 'Coca-Cola tradicional', descricao: '1 litro', lactose: '', preco: '9,00', categoria: 'bebidas', emoji: '🥤' },
+    { id: 18, nome: 'Coca-Cola Zero', descricao: '1 litro', lactose: '', preco: '9,00', categoria: 'bebidas', emoji: '🥤' },
+    { id: 19, nome: 'Guaraná Antarctica tradicional', descricao: '2 litros', lactose: '', preco: '11,00', categoria: 'bebidas', emoji: '🥤' },
+    { id: 20, nome: 'Coca-Cola tradicional', descricao: '2 litros', lactose: '', preco: '13,00', categoria: 'bebidas', emoji: '🥤' },
+    { id: 21, nome: 'Coca-Cola Zero', descricao: '2 litros', lactose: '', preco: '13,00', categoria: 'bebidas', emoji: '🥤' }
 ];
 
-// ===== ESTADO =====
+// ===== LISTA DE BAIRROS COM TAXA FIXA (R$ 10,00) =====
+const BAIRROS_TAXA_FIXA = [
+    "planalto", "raul bacelar", "conselheiro alberto silva", "casas carmem",
+    "reis veloso", "frei higino", "piauí", "piaui", "betânia", "betania",
+    "floriopolis", "floriópolis", "joão xxiii", "joao xxiii", "pedro",
+    "colina do alvorada", "catanduvas", "são benedito", "sao benedito",
+    "pindorama", "rodoviária", "rodoviaria", "ceará", "ceara",
+    "são francisco da guarita", "sao francisco da guarita", "sabiazal",
+    "dom rufino", "joaz souza", "primavera", "broder ville", "dunas",
+    "dirceu arcoverde", "santa luzia", "alto santa maria", "bebedouro",
+    "são vicente de paula", "sao vicente de paula", "são josé", "sao jose",
+    "centro", "nossa senhora de fátima", "nossa senhora de fatima",
+    "nossa senhora do carmo", "campos", "nova parnaíba", "nova parnaiba", "beira rio"
+];
+
+// ===== ESTADO DA APLICAÇÃO =====
 let carrinho = [];
+let categoriaAtiva = 'todos';
 let pedidoAtual = {
     tipo: null,
     endereco: {},
@@ -25,6 +56,7 @@ let pedidoAtual = {
 // ===== INICIALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', function() {
     renderizarProdutos();
+    initFiltroCategorias();
     initNavbar();
     initCarrinho();
     initModal();
@@ -32,11 +64,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===== RENDERIZAR PRODUTOS =====
-function renderizarProdutos() {
+function renderizarProdutos(categoria = 'todos') {
     const lista = document.getElementById('produtosLista');
     if (!lista) return;
 
-    lista.innerHTML = produtos.map(produto => `
+    const produtosFiltrados = categoria === 'todos' 
+        ? produtos 
+        : produtos.filter(p => p.categoria === categoria);
+
+    if (produtosFiltrados.length === 0) {
+        lista.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-light);">Nenhum produto encontrado nesta categoria.</p>`;
+        return;
+    }
+
+    lista.innerHTML = produtosFiltrados.map(produto => `
         <div class="produto-item" data-id="${produto.id}">
             <div class="produto-info">
                 <span class="nome">${produto.nome}</span>
@@ -46,17 +87,17 @@ function renderizarProdutos() {
             </div>
             <div class="produto-actions">
                 <div class="qtd-control">
-                    <button class="qtd-btn" data-id="${produto.id}" data-delta="-1">−</button>
+                    <button type="button" class="qtd-btn" data-id="${produto.id}" data-delta="-1">−</button>
                     <span class="qtd-value" id="qtd-${produto.id}">0</span>
-                    <button class="qtd-btn" data-id="${produto.id}" data-delta="1">+</button>
+                    <button type="button" class="qtd-btn" data-id="${produto.id}" data-delta="1">+</button>
                 </div>
-                <button class="add-btn" data-id="${produto.id}">Adicionar</button>
+                <button type="button" class="add-btn" data-id="${produto.id}">Adicionar</button>
             </div>
         </div>
     `).join('');
 
     // Eventos de quantidade
-    document.querySelectorAll('.qtd-btn').forEach(btn => {
+    lista.querySelectorAll('.qtd-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             const id = parseInt(this.getAttribute('data-id'));
@@ -69,7 +110,7 @@ function renderizarProdutos() {
     });
 
     // Eventos de adicionar
-    document.querySelectorAll('.add-btn').forEach(btn => {
+    lista.querySelectorAll('.add-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             const id = parseInt(this.getAttribute('data-id'));
@@ -89,19 +130,16 @@ function renderizarProdutos() {
             mostrarToast(`${produto.nome} adicionado!`);
         });
     });
+}
 
-    // Clique no item para adicionar automaticamente
-    document.querySelectorAll('.produto-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const id = parseInt(this.getAttribute('data-id'));
-            const span = document.getElementById(`qtd-${id}`);
-            let current = parseInt(span.textContent) || 0;
-            current += 1;
-            span.textContent = current;
-            
-            // Disparar clique no botão adicionar
-            const addBtn = this.querySelector('.add-btn');
-            if (addBtn) addBtn.click();
+// ===== FILTRO DE CATEGORIAS =====
+function initFiltroCategorias() {
+    document.querySelectorAll('.categoria-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.categoria-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            categoriaAtiva = this.getAttribute('data-categoria');
+            renderizarProdutos(categoriaAtiva);
         });
     });
 }
@@ -153,10 +191,12 @@ function atualizarCarrinhoUI() {
 
     const totalItems = carrinho.reduce((sum, item) => sum + item.qtd, 0);
     badge.textContent = totalItems;
+    badge.style.display = totalItems > 0 ? 'block' : 'none';
 
     if (carrinho.length === 0) {
         body.innerHTML = `
             <div class="cart-empty">
+                <span style="font-size:3rem;">🛒</span>
                 <p>Seu pedido está vazio</p>
                 <span>Adicione seus salgados favoritos!</span>
             </div>
@@ -171,14 +211,13 @@ function atualizarCarrinhoUI() {
         <div class="cart-item">
             <div class="cart-item-info">
                 <div class="cart-item-name">${item.nome}</div>
-                <div class="cart-item-detail">${item.qtd} unidades</div>
-                <div class="cart-item-price">R$ ${item.preco}</div>
+                <div class="cart-item-detail">${item.qtd}x R$ ${item.preco}</div>
             </div>
             <div class="cart-item-actions">
-                <button class="cart-item-qty-btn" onclick="atualizarQtdCarrinho(${item.id}, -1)">−</button>
+                <button type="button" class="cart-item-qty-btn" onclick="atualizarQtdCarrinho(${item.id}, -1)">−</button>
                 <span class="cart-item-qty">${item.qtd}</span>
-                <button class="cart-item-qty-btn" onclick="atualizarQtdCarrinho(${item.id}, 1)">+</button>
-                <button class="cart-item-remove" onclick="removerDoCarrinho(${item.id})">✕</button>
+                <button type="button" class="cart-item-qty-btn" onclick="atualizarQtdCarrinho(${item.id}, 1)">+</button>
+                <button type="button" class="cart-item-remove" onclick="removerDoCarrinho(${item.id})">✕</button>
             </div>
         </div>
     `).join('');
@@ -186,7 +225,7 @@ function atualizarCarrinhoUI() {
     total.textContent = `R$ ${getTotalCarrinho().toFixed(2).replace('.', ',')}`;
 }
 
-// ===== CARRINHO - ABRIR/FECHAR =====
+// ===== CARRINHO - CONTROLES DE VISIBILIDADE =====
 function abrirCarrinho() {
     document.getElementById('cartSidebar').classList.add('open');
 }
@@ -196,39 +235,33 @@ function fecharCarrinho() {
 }
 
 function toggleCarrinho() {
-    const sidebar = document.getElementById('cartSidebar');
-    sidebar.classList.toggle('open');
+    document.getElementById('cartSidebar').classList.toggle('open');
 }
 
-// ===== INICIALIZAR CARRINHO =====
 function initCarrinho() {
     document.getElementById('cartFloat').addEventListener('click', toggleCarrinho);
     document.getElementById('cartClose').addEventListener('click', fecharCarrinho);
     document.getElementById('cartCheckout').addEventListener('click', abrirModal);
 
-    // Fechar carrinho clicando fora
     document.addEventListener('click', function(e) {
         const sidebar = document.getElementById('cartSidebar');
         const float = document.getElementById('cartFloat');
-        if (sidebar.classList.contains('open') && 
-            !sidebar.contains(e.target) && 
-            !float.contains(e.target)) {
+        if (sidebar && float && sidebar.classList.contains('open') && 
+            !sidebar.contains(e.target) && !float.contains(e.target)) {
             fecharCarrinho();
         }
     });
 }
 
-// ===== MODAL =====
+// ===== MODAL E FLUXO DE CHECKOUT =====
 function abrirModal() {
     if (carrinho.length === 0) {
         mostrarToast('Adicione itens ao carrinho primeiro!');
         return;
     }
     document.getElementById('modalOverlay').classList.add('active');
+    ocultarTodosStepsModal();
     document.getElementById('modalStep1').style.display = 'block';
-    document.getElementById('modalStep2').style.display = 'none';
-    document.getElementById('modalStep3').style.display = 'none';
-    document.getElementById('modalStep4').style.display = 'none';
     fecharCarrinho();
 }
 
@@ -236,142 +269,163 @@ function fecharModal() {
     document.getElementById('modalOverlay').classList.remove('active');
 }
 
-function initModal() {
-    document.getElementById('modalClose').addEventListener('click', fecharModal);
-    document.getElementById('modalOverlay').addEventListener('click', function(e) {
-        if (e.target === this) fecharModal();
-    });
+function ocultarTodosStepsModal() {
+    document.getElementById('modalStep1').style.display = 'none';
+    document.getElementById('modalStep3').style.display = 'none';
+    document.getElementById('modalStep4').style.display = 'none';
+    const stepEvento = document.getElementById('modalStepEvento');
+    if (stepEvento) stepEvento.style.display = 'none';
+}
 
-    // Opções de entrega
+function initModal() {
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+
+    if (modalClose) modalClose.addEventListener('click', fecharModal);
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === this) fecharModal();
+        });
+    }
+
+    // Seleção da Opção de Entrega (Step 1)
     document.querySelectorAll('.delivery-option').forEach(btn => {
         btn.addEventListener('click', function() {
             const tipo = this.getAttribute('data-tipo');
             pedidoAtual.tipo = tipo;
 
-            if (tipo === 'entrega') {
-                document.getElementById('modalStep1').style.display = 'none';
-                document.getElementById('modalStep2').style.display = 'block';
-            } else if (tipo === 'retirada') {
-                document.getElementById('modalStep1').style.display = 'none';
+            ocultarTodosStepsModal();
+
+            if (tipo === 'retirada') {
+                document.getElementById('modalStep4').style.display = 'block';
+            } else if (tipo === 'entrega') {
                 document.getElementById('modalStep3').style.display = 'block';
-                document.getElementById('modalEnderecoCep').value = '64207-570';
-                document.getElementById('modalEnderecoRua').value = 'R. São Benedito, 475';
-                document.getElementById('modalEnderecoBairro').value = 'Planalto';
-                document.getElementById('modalEnderecoCidade').value = 'Parnaíba - PI';
-                document.getElementById('modalEnderecoNumero').focus();
             } else if (tipo === 'agendado') {
-                document.getElementById('modalStep1').style.display = 'none';
-                document.getElementById('modalStep3').style.display = 'block';
-                // TODO: adicionar campos de data/hora
+                exibirFormularioEvento();
             }
         });
     });
 
-    // Verificar CEP
-    document.getElementById('modalCepVerificar').addEventListener('click', verificarCEP);
-    document.getElementById('modalCep').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') verificarCEP();
-    });
+    // Confirmar Endereço
+    const btnConfirmarEndereco = document.getElementById('modalEnderecoConfirmar');
+    if (btnConfirmarEndereco) {
+        btnConfirmarEndereco.addEventListener('click', confirmarEndereco);
+    }
 
-    // Confirmar endereço
-    document.getElementById('modalEnderecoConfirmar').addEventListener('click', confirmarEndereco);
-
-    // Pagamento
+    // Seleção de Pagamento
     document.querySelectorAll('.pagamento-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.pagamento-btn').forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             pedidoAtual.pagamento = this.getAttribute('data-pagamento');
-            document.getElementById('modalPagamentoSelecionado').style.display = 'block';
-            document.getElementById('modalPagamentoSelecionado').textContent = `Pagamento: ${pedidoAtual.pagamento}`;
+            
+            const infoPag = document.getElementById('modalPagamentoSelecionado');
+            if (infoPag) {
+                infoPag.style.display = 'block';
+                infoPag.textContent = `Forma de pagamento selecionada: ${pedidoAtual.pagamento}`;
+            }
         });
     });
 
-    // Enviar pedido
-    document.getElementById('modalEnviarPedido').addEventListener('click', enviarPedido);
+    // Enviar Pedido
+    const btnEnviar = document.getElementById('modalEnviarPedido');
+    if (btnEnviar) btnEnviar.addEventListener('click', enviarPedido);
 }
 
-// ===== VERIFICAR CEP =====
-function verificarCEP() {
-    const input = document.getElementById('modalCep');
-    const cep = input.value.replace(/\D/g, '');
-    const resultado = document.getElementById('modalCepResultado');
-
-    if (cep.length !== 8) {
-        resultado.style.display = 'block';
-        resultado.className = 'error';
-        resultado.innerHTML = 'Digite um CEP válido com 8 dígitos.';
-        return;
-    }
-
-    const cepFormatado = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
-    const atendido = CONFIG.areasAtendidas.some(area => {
-        if (area.includes('-')) return cepFormatado === area;
-        return cep.startsWith(area);
-    });
-
-    if (atendido) {
-        resultado.style.display = 'block';
-        resultado.className = 'success';
-        resultado.innerHTML = '✅ Entregamos no seu endereço!';
-        document.getElementById('modalStep2').style.display = 'none';
-        document.getElementById('modalStep3').style.display = 'block';
-        buscarEnderecoPorCEP(cep);
-    } else {
-        resultado.style.display = 'block';
-        resultado.className = 'error';
-        resultado.innerHTML = `
-            ❌ Ops! Ainda não entregamos nessa região.
-            <br>
-            <button class="btn btn-whatsapp" style="margin-top:12px; padding:8px 20px; font-size:0.9rem;" id="cepFalarAtendimento">
-                FALAR COM ATENDIMENTO
-            </button>
-        `;
-        document.getElementById('cepFalarAtendimento').addEventListener('click', () => {
-            openWhatsApp('Olá! Vim pelo site da Le Gust Salgaderia. Meu CEP é ' + cepFormatado + ' e gostaria de saber sobre entrega.');
-        });
-    }
-}
-
-// ===== BUSCAR ENDEREÇO =====
-function buscarEnderecoPorCEP(cep) {
-    // Simulação - em produção usar ViaCEP
-    const enderecos = {
-        '64200-000': { rua: 'R. São Benedito', bairro: 'Planalto', cidade: 'Parnaíba' }
-    };
-    const end = enderecos[cep.replace(/(\d{5})(\d{3})/, '$1-$2')] || { rua: 'Rua Exemplo', bairro: 'Centro', cidade: 'Parnaíba' };
-
-    document.getElementById('modalEnderecoCep').value = cep.replace(/(\d{5})(\d{3})/, '$1-$2');
-    document.getElementById('modalEnderecoRua').value = end.rua;
-    document.getElementById('modalEnderecoBairro').value = end.bairro;
-    document.getElementById('modalEnderecoCidade').value = end.cidade;
-    document.getElementById('modalEnderecoNumero').focus();
-}
-
-// ===== CONFIRMAR ENDEREÇO =====
+// ===== CONFIRMAR ENDEREÇO DE ENTREGA =====
 function confirmarEndereco() {
+    const rua = document.getElementById('modalEnderecoRua').value.trim();
     const numero = document.getElementById('modalEnderecoNumero').value.trim();
-    if (!numero) {
-        alert('Por favor, informe o número do endereço.');
-        document.getElementById('modalEnderecoNumero').focus();
+    const bairro = document.getElementById('modalEnderecoBairro').value.trim();
+
+    if (!rua || !numero || !bairro) {
+        alert('Por favor, preencha os campos obrigatórios: Rua, Número e Bairro.');
         return;
     }
+
+    const bairroFormatado = bairro.toLowerCase().trim();
+    const possuiTaxaFixa = BAIRROS_TAXA_FIXA.includes(bairroFormatado);
 
     pedidoAtual.endereco = {
-        cep: document.getElementById('modalEnderecoCep').value,
-        rua: document.getElementById('modalEnderecoRua').value,
+        rua: rua,
         numero: numero,
-        complemento: document.getElementById('modalEnderecoComplemento').value,
-        bairro: document.getElementById('modalEnderecoBairro').value,
-        cidade: document.getElementById('modalEnderecoCidade').value,
-        referencia: document.getElementById('modalEnderecoReferencia').value
+        complemento: document.getElementById('modalEnderecoComplemento').value.trim(),
+        bairro: bairro,
+        cidade: 'Parnaíba - PI',
+        referencia: document.getElementById('modalEnderecoReferencia').value.trim(),
+        taxaFixa: possuiTaxaFixa,
+        valorTaxa: possuiTaxaFixa ? 10.00 : 0.00
     };
 
-    document.getElementById('modalStep3').style.display = 'none';
+    ocultarTodosStepsModal();
     document.getElementById('modalStep4').style.display = 'block';
 }
 
-// ===== ENVIAR PEDIDO =====
+// ===== ESTRUTURA PARA EVENTOS / ENCOMENDAS =====
+function exibirFormularioEvento() {
+    let containerEvento = document.getElementById('modalStepEvento');
+    if (!containerEvento) {
+        containerEvento = document.createElement('div');
+        containerEvento.id = 'modalStepEvento';
+        containerEvento.className = 'modal-step';
+        containerEvento.innerHTML = `
+            <h3>🎉 Agendamento de Evento</h3>
+            <p style="color: var(--text-light); margin-bottom:12px; font-size: 0.9rem;">
+                Preencha os dados do evento para enviarmos seu orçamento:
+            </p>
+            <div class="form-group" style="margin-bottom:10px;">
+                <label style="display:block; font-weight:bold; margin-bottom:4px;">Tipo do Evento *</label>
+                <input type="text" id="eventoTipo" placeholder="Ex: Aniversário, Casamento, Reunião" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;" required />
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+                <label style="display:block; font-weight:bold; margin-bottom:4px;">Quantidade total de salgados *</label>
+                <input type="number" id="eventoQtdSalgados" placeholder="Ex: 200" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;" required />
+            </div>
+            <div class="form-group" style="margin-bottom:10px;">
+                <label style="display:block; font-weight:bold; margin-bottom:4px;">Data e Horário *</label>
+                <input type="datetime-local" id="eventoDataHora" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;" required />
+            </div>
+            <div class="form-group" style="margin-bottom:16px;">
+                <label style="display:block; font-weight:bold; margin-bottom:4px;">Local / Bairro do Evento *</label>
+                <input type="text" id="eventoLocal" placeholder="Ex: Salão de Festas - Bairro Centro" style="width:100%; padding:8px; border:1px solid #ccc; border-radius:4px;" required />
+            </div>
+            <button type="button" class="btn btn-primary btn-full" id="btnEnviarEvento">
+                📲 SOLICITAR ORÇAMENTO NO WHATSAPP
+            </button>
+        `;
+        document.querySelector('.modal-content').appendChild(containerEvento);
+        document.getElementById('btnEnviarEvento').addEventListener('click', enviarPedidoEvento);
+    }
+
+    containerEvento.style.display = 'block';
+}
+
+function enviarPedidoEvento() {
+    const tipo = document.getElementById('eventoTipo').value.trim();
+    const qtd = document.getElementById('eventoQtdSalgados').value.trim();
+    const dataHora = document.getElementById('eventoDataHora').value;
+    const local = document.getElementById('eventoLocal').value.trim();
+
+    if (!tipo || !qtd || !dataHora || !local) {
+        alert('Por favor, preencha todos os campos do evento.');
+        return;
+    }
+
+    const dataFormatada = new Date(dataHora).toLocaleString('pt-BR');
+
+    let msg = `🎉 *ORÇAMENTO PARA EVENTO - LE GUST SALGADERIA*\n\n`;
+    msg += `🎈 *Tipo do Evento:* ${tipo}\n`;
+    msg += `🥟 *Quantidade desejada:* ${qtd} salgados\n`;
+    msg += `📅 *Data e Horário:* ${dataFormatada}\n`;
+    msg += `📍 *Local do Evento:* ${local}\n\n`;
+    msg += `Aguardando confirmação de valores e disponibilidade!`;
+
+    openWhatsApp(msg);
+    fecharModal();
+    mostrarToast('Solicitação de evento enviada! 🥳');
+}
+
+// ===== ENVIAR PEDIDO VIA WHATSAPP =====
 function enviarPedido() {
     if (!pedidoAtual.pagamento) {
         alert('Selecione a forma de pagamento.');
@@ -379,39 +433,47 @@ function enviarPedido() {
     }
 
     let message = '🍽️ *NOVO PEDIDO - LE GUST SALGADERIA*\n\n';
-    message += `👤 *Cliente:* _______________\n\n`;
-    message += `📋 *PEDIDO:*\n`;
+    message += `📋 *ITENS DO PEDIDO:*\n`;
 
-    let total = 0;
+    let subtotalProdutos = 0;
     carrinho.forEach(item => {
         const subtotal = parseFloat(item.preco.replace(',', '.')) * item.qtd;
-        total += subtotal;
+        subtotalProdutos += subtotal;
         message += `• ${item.qtd}x ${item.nome} = R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
     });
 
-    message += `\n💰 *TOTAL: R$ ${total.toFixed(2).replace('.', ',')}*\n\n`;
-    message += `📝 *PAGAMENTO:* ${pedidoAtual.pagamento}\n\n`;
-
-    const tipoLabels = { 'entrega': 'Entrega em casa', 'retirada': 'Retirada na loja', 'agendado': 'Agendado' };
-    message += `📦 *TIPO:* ${tipoLabels[pedidoAtual.tipo] || 'Não informado'}\n`;
-
-    if (pedidoAtual.tipo === 'entrega' || pedidoAtual.tipo === 'agendado') {
-        const end = pedidoAtual.endereco;
-        message += `\n📍 *ENDEREÇO:*\n`;
-        message += `${end.rua}, ${end.numero}\n`;
-        if (end.complemento) message += `Complemento: ${end.complemento}\n`;
-        message += `${end.bairro}\n${end.cidade} - PI\nCEP: ${end.cep}\n`;
-        if (end.referencia) message += `Referência: ${end.referencia}\n`;
-
-        const enderecoStr = `${end.rua}, ${end.numero} - ${end.bairro}, ${end.cidade}`;
-        message += `\n📍 *LOCALIZAÇÃO:*\nhttps://www.google.com/maps/search/?api=1&query=${encodeURIComponent(enderecoStr)}`;
-    }
+    message += `\n💵 *Subtotal dos Produtos:* R$ ${subtotalProdutos.toFixed(2).replace('.', ',')}\n`;
 
     if (pedidoAtual.tipo === 'retirada') {
-        message += `\n🏪 *RETIRADA NA LOJA:*\n${CONFIG.endereco}`;
+        message += `📦 *OPÇÃO:* RETIRADA NA LOJA\n`;
+        message += `📍 *Endereço para Retirada:* ${CONFIG_ENV.endereco}\n`;
+        message += `💰 *TOTAL A PAGAR:* R$ ${subtotalProdutos.toFixed(2).replace('.', ',')}\n`;
+        message += `💳 *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento}\n`;
+    } 
+    else if (pedidoAtual.tipo === 'entrega') {
+        const end = pedidoAtual.endereco;
+        message += `🛵 *OPÇÃO:* ENTREGA EM CASA\n\n`;
+        message += `📍 *ENDEREÇO DE ENTREGA:*\n`;
+        message += `Rua: ${end.rua}, Nº ${end.numero}\n`;
+        if (end.complemento) message += `Complemento: ${end.complemento}\n`;
+        message += `Bairro: ${end.bairro}\n`;
+        message += `Cidade: ${end.cidade}\n`;
+        if (end.referencia) message += `Referência: ${end.referencia}\n\n`;
+
+        if (end.taxaFixa) {
+            const totalComTaxa = subtotalProdutos + end.valorTaxa;
+            message += `🛵 *Taxa de Entrega:* R$ 10,00\n`;
+            message += `💰 *TOTAL FINAL:* R$ ${totalComTaxa.toFixed(2).replace('.', ',')}\n`;
+        } else {
+            message += `🛵 *Taxa de Entrega:* A calcular\n`;
+            message += `⚠️ por favor aguardar a confirmaçao para local de entrega\n`;
+            message += `💰 *TOTAL PARCIAL (SEM TAXA):* R$ ${subtotalProdutos.toFixed(2).replace('.', ',')}\n`;
+        }
+
+        message += `💳 *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento}\n`;
     }
 
-    message += `\n\n✅ *CONFIRMAR PEDIDO?*\nDigite "CONFIRMO" para prosseguir.`;
+    message += `\n✅ *Aguardando confirmação do pedido.*`;
 
     openWhatsApp(message);
     limparCarrinho();
@@ -419,14 +481,16 @@ function enviarPedido() {
     mostrarToast('Pedido enviado com sucesso! 🎉');
 }
 
-// ===== AJUDA =====
+// ===== NAVEGAÇÃO E AUXILIARES =====
 function initAjuda() {
-    document.getElementById('ajudaDelivery').addEventListener('click', () => {
-        openWhatsApp('Olá! Vim pelo site da Le Gust Salgaderia e preciso de ajuda com meu pedido.');
-    });
+    const btnAjuda = document.getElementById('ajudaDelivery');
+    if (btnAjuda) {
+        btnAjuda.addEventListener('click', () => {
+            openWhatsApp('Olá! Vim pelo site da Le Gust Salgaderia e preciso de ajuda com meu pedido.');
+        });
+    }
 }
 
-// ===== NAVBAR =====
 function initNavbar() {
     const toggle = document.getElementById('menuToggle');
     const menu = document.getElementById('navMenu');
@@ -438,13 +502,11 @@ function initNavbar() {
     }
 }
 
-// ===== WHATSAPP =====
 function openWhatsApp(message) {
-    const url = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${CONFIG_ENV.whatsapp}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
 }
 
-// ===== TOAST =====
 function mostrarToast(message) {
     const existing = document.querySelector('.toast');
     if (existing) existing.remove();
