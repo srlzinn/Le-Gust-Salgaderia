@@ -118,7 +118,7 @@ const produtos = [
         lactose: "Contém lactose",
         preco: "20,00",
         categoria: "salgados",
-        emoji: "", // REMOVIDO: ícone de pimenta
+        emoji: "",
         imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881919131blob"
     },
 
@@ -945,7 +945,7 @@ function confirmarEncomenda() {
 
 
 // ============================================================
-// RESUMO DO PEDIDO
+// RESUMO DO PEDIDO - COM TAXA DE ENTREGA
 // ============================================================
 
 function mostrarResumoPedido() {
@@ -1025,7 +1025,7 @@ function mostrarResumoPedido() {
             }).join("")}
         </div>
 
-        <!-- VALORES -->
+        <!-- VALORES COM TAXA -->
         <div style="margin-top:15px; padding:15px; background:#f8f8f8; border-radius:10px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                 <span>Subtotal</span>
@@ -1065,7 +1065,7 @@ function mostrarResumoPedido() {
 
         ${pedidoAtual.tipo === "entrega" && !pedidoAtual.endereco.taxaFixa ? `
             <div style="margin-top:12px; padding:12px; background:#fff3cd; border-radius:8px; color:#856404;">
-                ⚠️ A taxa de entrega será confirmada pelo atendimento.
+                 A taxa de entrega será confirmada pelo atendimento.
             </div>
         ` : ""}
 
@@ -1098,7 +1098,7 @@ function mostrarResumoPedido() {
 
 
 // ============================================================
-// ENVIAR PEDIDO PARA WHATSAPP
+// ENVIAR PEDIDO PARA WHATSAPP - COM TAXA
 // ============================================================
 
 function confirmarEEnviarPedido() {
@@ -1143,8 +1143,8 @@ function confirmarEEnviarPedido() {
 
     if (pedidoAtual.tipo === "entrega") {
         const end = pedidoAtual.endereco;
-        message += "\n🛵 *OPÇÃO:* ENTREGA EM CASA\n";
-        message += "\n📍 *ENDEREÇO DE ENTREGA:*\n";
+        message += "\n *OPÇÃO:* ENTREGA EM CASA\n";
+        message += "\n *ENDEREÇO DE ENTREGA:*\n";
         message += `Rua: ${end.rua}, Nº ${end.numero}\n`;
         if (end.complemento) message += `Complemento: ${end.complemento}\n`;
         message += `Bairro: ${end.bairro}\n`;
