@@ -56,19 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // REDIRECIONAMENTO DOS BOTÕES "FAZER ENCOMENDA"
     // =========================================================
 
-    const encomendaBtns = document.querySelectorAll('.encomenda-btn, .btn[href="#encomendas"]');
-    encomendaBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector('#encomendas');
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
 
 
     // =========================================================
