@@ -211,15 +211,15 @@ body {
 /* ===== IMAGEM DO PRODUTO ===== */
 .produto-imagem {
     flex-shrink: 0;
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     border-radius: var(--radius-sm);
     overflow: hidden;
     background: var(--cream);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--cream-dark);
+    border: 5px solid var(--cream-dark);
 }
 
 .produto-imagem img {

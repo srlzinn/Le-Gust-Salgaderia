@@ -170,6 +170,7 @@ const produtos = [
         imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719926000761blob",
         observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
     },
+
     {
         id: 14,
         nome: "Pão de Queijo Recheado de Calabresa",
@@ -178,9 +179,9 @@ const produtos = [
         preco: "20,00",
         categoria: "congelados",
         emoji: "🧀",
-        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719926000761blob",
+        imagem: "./pao-queijo-calabresa.jpeg",
         observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
-    },
+        },
 
     // ========================================================
     // BEBIDAS
