@@ -7,7 +7,7 @@
 // ============================================================
 
 const CONFIG_ENV = window.CONFIG || {
-    whatsapp: "5586999999999",
+    whatsapp: "558681532377",
     endereco: "R. São Benedito, 475 - Planalto, Parnaíba - PI"
 };
 
