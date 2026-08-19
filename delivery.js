@@ -320,7 +320,8 @@ let categoriaAtiva = "todos";
 let pedidoAtual = {
     tipo: null,
     endereco: {},
-    pagamento: null
+    pagamento: null,
+    agendamento: null
 };
 
 
@@ -329,6 +330,7 @@ let pedidoAtual = {
 // ============================================================
 
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("🚀 Inicializando delivery...");
     renderizarProdutos();
     initFiltroCategorias();
     initNavbar();
@@ -336,6 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initModal();
     initAjuda();
     atualizarCarrinhoUI();
+    console.log("✅ Delivery inicializado!");
 });
 
 
@@ -346,7 +349,10 @@ document.addEventListener("DOMContentLoaded", function () {
 function renderizarProdutos(categoria = "todos") {
 
     const lista = document.getElementById("produtosLista");
-    if (!lista) return;
+    if (!lista) {
+        console.error("❌ #produtosLista não encontrado!");
+        return;
+    }
 
     const produtosFiltrados = categoria === "todos"
         ? produtos
@@ -666,7 +672,7 @@ function fecharModal() {
 }
 
 function ocultarTodosStepsModal() {
-    const ids = ["modalStep1", "modalStep3", "modalStep4", "modalStepNome", "modalStepEncomenda"];
+    const ids = ["modalStep1", "modalStep3", "modalStep4", "modalStepNome", "modalStepEncomenda", "modalStepResumo"];
     ids.forEach(id => {
         const element = document.getElementById(id);
         if (element) element.style.display = "none";
@@ -679,6 +685,8 @@ function ocultarTodosStepsModal() {
 // ============================================================
 
 function initModal() {
+    console.log("🔄 Inicializando modal...");
+    
     const modalOverlay = document.getElementById("modalOverlay");
     const modalClose = document.getElementById("modalClose");
 
@@ -690,12 +698,13 @@ function initModal() {
     }
 
     // ========================================================
-    // ENTREGA / RETIRADA / ENCOMENDA
+    // ENTREGA / RETIRADA / ENCOMENDA (AGENDAMENTO)
     // ========================================================
 
     document.querySelectorAll(".delivery-option").forEach(btn => {
         btn.addEventListener("click", function () {
             const tipo = this.dataset.tipo;
+            console.log("📦 Tipo selecionado:", tipo);
             pedidoAtual.tipo = tipo;
             ocultarTodosStepsModal();
 
@@ -707,13 +716,18 @@ function initModal() {
                 if (step3) step3.style.display = "block";
             } else if (tipo === "encomenda") {
                 const stepEncomenda = document.getElementById("modalStepEncomenda");
-                if (stepEncomenda) stepEncomenda.style.display = "block";
+                if (stepEncomenda) {
+                    console.log("📅 Mostrando formulário de agendamento");
+                    stepEncomenda.style.display = "block";
+                } else {
+                    console.error("❌ modalStepEncomenda não encontrado!");
+                }
             }
         });
     });
 
     // ========================================================
-    // CONFIRMAR NOME
+    // CONFIRMAR NOME (Retirada e Entrega)
     // ========================================================
 
     const btnNome = document.getElementById("modalNomeConfirmar");
@@ -732,7 +746,7 @@ function initModal() {
     }
 
     // ========================================================
-    // CONFIRMAR ENDEREÇO
+    // CONFIRMAR ENDEREÇO (Entrega)
     // ========================================================
 
     const btnEndereco = document.getElementById("modalEnderecoConfirmar");
@@ -741,12 +755,18 @@ function initModal() {
     }
 
     // ========================================================
-    // CONFIRMAR ENCOMENDA
+    // CONFIRMAR ENCOMENDA (Agendamento)
     // ========================================================
 
     const btnEncomenda = document.getElementById("btnConfirmarEncomenda");
     if (btnEncomenda) {
-        btnEncomenda.addEventListener("click", confirmarEncomenda);
+        console.log("✅ Botão btnConfirmarEncomenda encontrado!");
+        btnEncomenda.addEventListener("click", function() {
+            console.log("🔄 Clicou em CONFIRMAR AGENDAMENTO");
+            confirmarEncomenda();
+        });
+    } else {
+        console.error("❌ btnConfirmarEncomenda não encontrado!");
     }
 
     // ========================================================
@@ -810,7 +830,6 @@ function criarBotaoFinalizar() {
                 alert("Selecione uma forma de pagamento.");
                 return;
             }
-            // Verifica o valor mínimo do pedido (R$ 16,00)
             const subtotal = getTotalCarrinho();
             if (subtotal < 16.00) {
                 alert("Pedido mínimo de R$ 16,00.");
@@ -823,7 +842,7 @@ function criarBotaoFinalizar() {
 
 
 // ============================================================
-// CONFIRMAR ENDEREÇO
+// CONFIRMAR ENDEREÇO (Entrega)
 // ============================================================
 
 function confirmarEndereco() {
@@ -857,39 +876,51 @@ function confirmarEndereco() {
 
 
 // ============================================================
-// ENCOMENDA - FORMULÁRIO SIMPLIFICADO (SEM EVENTOS)
+// CONFIRMAR ENCOMENDA (Agendamento)
 // ============================================================
 
 function confirmarEncomenda() {
+    console.log("📝 Validando formulário de agendamento...");
+    
     // Coleta os dados
+    const nome = document.getElementById("encomendaNome")?.value.trim();
     const data = document.getElementById("encomendaData")?.value;
     const horarioManha = document.getElementById("encomendaHorario")?.value;
     const horarioTarde = document.getElementById("encomendaHorarioTarde")?.value;
     const horario = horarioManha || horarioTarde;
     const endereco = document.getElementById("encomendaEndereco")?.value.trim();
+    const numero = document.getElementById("encomendaNumero")?.value.trim();
     const bairro = document.getElementById("encomendaBairro")?.value.trim();
     const referencia = document.getElementById("encomendaReferencia")?.value.trim();
-    const nome = document.getElementById("encomendaNome")?.value.trim();
 
     // Validações
+    if (!nome) {
+        alert("Por favor, informe seu nome.");
+        document.getElementById("encomendaNome")?.focus();
+        return;
+    }
     if (!data) {
-        alert("Por favor, selecione a data da encomenda.");
+        alert("Por favor, selecione a data do agendamento.");
+        document.getElementById("encomendaData")?.focus();
         return;
     }
     if (!horario) {
-        alert("Por favor, selecione o horário da encomenda.");
+        alert("Por favor, selecione o horário do agendamento.");
         return;
     }
     if (!endereco) {
-        alert("Por favor, informe o endereço.");
+        alert("Por favor, informe a rua.");
+        document.getElementById("encomendaEndereco")?.focus();
+        return;
+    }
+    if (!numero) {
+        alert("Por favor, informe o número da casa.");
+        document.getElementById("encomendaNumero")?.focus();
         return;
     }
     if (!bairro) {
         alert("Por favor, informe o bairro.");
-        return;
-    }
-    if (!nome) {
-        alert("Por favor, informe seu nome.");
+        document.getElementById("encomendaBairro")?.focus();
         return;
     }
 
@@ -900,7 +931,9 @@ function confirmarEncomenda() {
         return;
     }
 
-    // Formata a data
+    console.log("✅ Todos os campos validados!");
+
+    // Formata a data para exibição
     const dataFormatada = new Date(data + 'T' + horario).toLocaleString('pt-BR', {
         day: '2-digit',
         month: '2-digit',
@@ -909,49 +942,48 @@ function confirmarEncomenda() {
         minute: '2-digit'
     });
 
-    // Monta a mensagem
-    let message = " *ENCOMENDA - LE GUST SALGADERIA*\n\n";
-    message += ` *CLIENTE:* ${nome}\n`;
-    message += ` *DATA E HORÁRIO:* ${dataFormatada}\n\n`;
-    
-    message += " *ITENS DA ENCOMENDA:*\n";
-    let subtotalProdutos = 0;
-    carrinho.forEach(item => {
-        const preco = parseFloat(String(item.preco).replace(",", "."));
-        const subtotalItem = preco * item.qtd;
-        subtotalProdutos += subtotalItem;
-        message += `• ${item.qtd}x ${item.nome} = R$ ${subtotalItem.toFixed(2).replace(".", ",")}\n`;
-    });
+    // Salva os dados do agendamento
+    pedidoAtual.agendamento = {
+        nome,
+        data,
+        horario,
+        endereco,
+        numero,
+        bairro,
+        referencia: referencia || "",
+        cidade: "Parnaíba - PI",
+        dataFormatada: dataFormatada
+    };
 
-    message += `\n *SUBTOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
-    message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n\n`;
+    console.log("📅 Agendamento salvo:", pedidoAtual.agendamento);
 
-    message += " *LOCAL DA ENCOMENDA:*\n";
-    message += `Endereço: ${endereco}\n`;
-    message += `Bairro: ${bairro}\n`;
-    if (referencia) message += `Referência: ${referencia}\n`;
-
-    message += `\n *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento || 'A definir'}\n`;
-    message += "\n━━━━━━━━━━━━━━━━━━\n";
-    message += " *ENCOMENDA REALIZADA PELO SITE*\n";
-    message += "Aguardando confirmação da Le Gust.";
-
-    openWhatsApp(message);
-    limparCarrinho();
-    pedidoAtual = { tipo: null, endereco: {}, pagamento: null };
-    fecharModal();
-    mostrarToast("Encomenda enviada para o WhatsApp!");
+    // Avança para o step de pagamento
+    ocultarTodosStepsModal();
+    const step4 = document.getElementById("modalStep4");
+    if (step4) {
+        step4.style.display = "block";
+        console.log("➡️ Avançando para step de pagamento");
+    }
+    if (pedidoAtual.pagamento) criarBotaoFinalizar();
 }
 
 
 // ============================================================
-// RESUMO DO PEDIDO - COM TAXA DE ENTREGA
+// RESUMO DO PEDIDO - COM TAXA APENAS PARA ENTREGA
 // ============================================================
 
 function mostrarResumoPedido() {
+    console.log("📋 Gerando resumo do pedido...");
+    
     // NOME
+    let nomeCliente = "";
+
     const campoNome = document.getElementById("clienteNome");
-    const nomeCliente = campoNome ? campoNome.value.trim() : "";
+    if (campoNome && campoNome.value.trim()) {
+        nomeCliente = campoNome.value.trim();
+    } else if (pedidoAtual.agendamento && pedidoAtual.agendamento.nome) {
+        nomeCliente = pedidoAtual.agendamento.nome;
+    }
 
     if (!nomeCliente) {
         alert("Por favor, informe seu nome antes de continuar.");
@@ -972,14 +1004,21 @@ function mostrarResumoPedido() {
     const subtotal = getTotalCarrinho();
     let taxa = 0;
     let textoTaxa = "R$ 0,00";
+    let tipoEntrega = "";
 
+    // Taxa de entrega APENAS para a opção "entrega"
     if (pedidoAtual.tipo === "entrega") {
+        tipoEntrega = "🛵 Entrega em casa";
         if (pedidoAtual.endereco.taxaFixa) {
             taxa = pedidoAtual.endereco.valorTaxa;
             textoTaxa = `R$ ${taxa.toFixed(2).replace(".", ",")}`;
         } else {
             textoTaxa = "A calcular";
         }
+    } else if (pedidoAtual.tipo === "retirada") {
+        tipoEntrega = "🏪 Retirada na loja";
+    } else if (pedidoAtual.tipo === "encomenda") {
+        tipoEntrega = "📅 Agendamento";
     }
 
     const total = subtotal + taxa;
@@ -1007,6 +1046,12 @@ function mostrarResumoPedido() {
             <p style="margin:5px 0 0;">${nomeCliente}</p>
         </div>
 
+        <!-- TIPO DE ENTREGA -->
+        <div style="margin-bottom:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
+            <strong>📦 Tipo</strong>
+            <p style="margin:5px 0 0;">${tipoEntrega}</p>
+        </div>
+
         <!-- ITENS -->
         <div class="resumo-section">
             <strong>🛒 Itens do pedido</strong>
@@ -1025,7 +1070,7 @@ function mostrarResumoPedido() {
             }).join("")}
         </div>
 
-        <!-- VALORES COM TAXA -->
+        <!-- VALORES -->
         <div style="margin-top:15px; padding:15px; background:#f8f8f8; border-radius:10px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                 <span>Subtotal</span>
@@ -1063,9 +1108,19 @@ function mostrarResumoPedido() {
             </div>
         ` : ""}
 
+        ${pedidoAtual.tipo === "encomenda" ? `
+            <div style="margin-top:15px; padding:12px; background:#f8f8f8; border-radius:8px;">
+                <strong>📅 Agendamento</strong>
+                <p><strong>Data/Horário:</strong> ${pedidoAtual.agendamento?.dataFormatada || "Não informado"}</p>
+                <p><strong>Endereço:</strong> ${pedidoAtual.agendamento?.endereco || ""}, Nº ${pedidoAtual.agendamento?.numero || ""}</p>
+                <p><strong>Bairro:</strong> ${pedidoAtual.agendamento?.bairro || ""}</p>
+                ${pedidoAtual.agendamento?.referencia ? `<p><strong>Referência:</strong> ${pedidoAtual.agendamento.referencia}</p>` : ""}
+            </div>
+        ` : ""}
+
         ${pedidoAtual.tipo === "entrega" && !pedidoAtual.endereco.taxaFixa ? `
             <div style="margin-top:12px; padding:12px; background:#fff3cd; border-radius:8px; color:#856404;">
-                 A taxa de entrega será confirmada pelo atendimento.
+                ⚠️ A taxa de entrega será confirmada pelo atendimento.
             </div>
         ` : ""}
 
@@ -1083,9 +1138,14 @@ function mostrarResumoPedido() {
     if (btnVoltar) {
         btnVoltar.addEventListener("click", function () {
             ocultarTodosStepsModal();
-            const step4 = document.getElementById("modalStep4");
-            if (step4) step4.style.display = "block";
-            criarBotaoFinalizar();
+            if (pedidoAtual.tipo === "encomenda") {
+                const stepEncomenda = document.getElementById("modalStepEncomenda");
+                if (stepEncomenda) stepEncomenda.style.display = "block";
+            } else {
+                const step4 = document.getElementById("modalStep4");
+                if (step4) step4.style.display = "block";
+                criarBotaoFinalizar();
+            }
         });
     }
 
@@ -1098,12 +1158,20 @@ function mostrarResumoPedido() {
 
 
 // ============================================================
-// ENVIAR PEDIDO PARA WHATSAPP - COM TAXA
+// ENVIAR PEDIDO PARA WHATSAPP
 // ============================================================
 
 function confirmarEEnviarPedido() {
+    console.log("📤 Enviando pedido para WhatsApp...");
+    
+    // Tenta pegar o nome de diferentes fontes
+    let nomeCliente = "";
     const campoNome = document.getElementById("clienteNome");
-    const nomeCliente = campoNome ? campoNome.value.trim() : "";
+    if (campoNome && campoNome.value.trim()) {
+        nomeCliente = campoNome.value.trim();
+    } else if (pedidoAtual.agendamento && pedidoAtual.agendamento.nome) {
+        nomeCliente = pedidoAtual.agendamento.nome;
+    }
 
     if (!nomeCliente) {
         alert("Por favor, informe seu nome antes de enviar o pedido.");
@@ -1135,12 +1203,14 @@ function confirmarEEnviarPedido() {
 
     message += `\n *SUBTOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
 
+    // RETIRADA
     if (pedidoAtual.tipo === "retirada") {
         message += "\n *OPÇÃO:* RETIRADA NA LOJA\n";
         message += ` *ENDEREÇO:* ${CONFIG_ENV.endereco}\n`;
         message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
     }
 
+    // ENTREGA
     if (pedidoAtual.tipo === "entrega") {
         const end = pedidoAtual.endereco;
         message += "\n *OPÇÃO:* ENTREGA EM CASA\n";
@@ -1162,6 +1232,21 @@ function confirmarEEnviarPedido() {
         }
     }
 
+    // AGENDAMENTO / ENCOMENDA
+    if (pedidoAtual.tipo === "encomenda") {
+        const ag = pedidoAtual.agendamento;
+        message += "\n *OPÇÃO:* AGENDAMENTO\n";
+        message += ` *DATA E HORÁRIO:* ${ag?.dataFormatada || "Não informado"}\n\n`;
+        
+        message += " *ENDEREÇO:*\n";
+        message += `${ag?.endereco || "Não informado"}, Nº ${ag?.numero || ""}\n`;
+        message += `Bairro: ${ag?.bairro || "Não informado"}\n`;
+        message += `Cidade: Parnaíba - PI\n`;
+        if (ag?.referencia) message += `Referência: ${ag.referencia}\n`;
+        
+        message += `\n *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+    }
+
     message += ` *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento}\n`;
     message += "\n━━━━━━━━━━━━━━━━━━\n";
     message += " *PEDIDO REALIZADO PELO SITE*\n";
@@ -1169,7 +1254,7 @@ function confirmarEEnviarPedido() {
 
     openWhatsApp(message);
     limparCarrinho();
-    pedidoAtual = { tipo: null, endereco: {}, pagamento: null };
+    pedidoAtual = { tipo: null, endereco: {}, pagamento: null, agendamento: null };
     if (campoNome) campoNome.value = "";
     fecharModal();
     mostrarToast("Pedido enviado para o WhatsApp!");
