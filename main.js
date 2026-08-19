@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
             id: 9,
-            nome: "Cigarrete de Calabresa", // CORRIGIDO: ortografia
+            nome: "Cigarrete de Calabresa",
             categoria: "salgados",
             quantidade: "25 unidades",
             preco: "R$ 20,00",
@@ -172,9 +172,10 @@ document.addEventListener("DOMContentLoaded", () => {
         // CONGELADOS
         // =====================================================
 
+        // === PÃO DE QUEIJO (já existentes) ===
         {
             id: 12,
-            nome: "Pão de Queijo Tradicional", // CORRIGIDO
+            nome: "Pão de Queijo Tradicional",
             categoria: "congelados",
             quantidade: "25 unidades",
             preco: "R$ 20,00",
@@ -183,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
             id: 13,
-            nome: "Pão de Queijo Tradicional", // CORRIGIDO
+            nome: "Pão de Queijo Tradicional",
             categoria: "congelados",
             quantidade: "50 unidades",
             preco: "R$ 35,00",
@@ -192,11 +193,93 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
             id: 14,
-            nome: "Pão de Queijo Recheado de Calabresa", // CORRIGIDO (NOVO)
+            nome: "Pão de Queijo Recheado de Calabresa",
             categoria: "congelados",
             quantidade: "25 unidades",
             preco: "R$ 20,00",
             obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
+        },
+
+        // === NOVOS PRODUTOS CONGELADOS (R$ 16,00 - 25 unidades) ===
+        {
+            id: 21,
+            nome: "Coxinha de Frango (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 22,
+            nome: "Quibe com Catupiry (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 23,
+            nome: "Travesseiro de Presunto e Queijo (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 24,
+            nome: "Enroladinho de Salsicha (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 25,
+            nome: "Bolinho de Carne Moída (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 26,
+            nome: "Cigarrete de Calabresa (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 27,
+            nome: "Bolinha de Queijo (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 28,
+            nome: "Mini Churros de Doce de Leite (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
+        },
+
+        {
+            id: 29,
+            nome: "Bolinha de Carne Seca (Congelado)",
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 16,00",
+            obs: "Contém lactose. Produto congelado. Deve ser frito ou assado em casa."
         },
 
 
