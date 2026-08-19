@@ -42,7 +42,7 @@ const produtos = [
         categoria: "salgados",
         emoji: "🥟",
         imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/202403141725_M3ey_",
-        observacao: "Geralmente inclui coxinha de frango, bolinho de carne moída, cigarette de calabresa, bolinha de queijo e travesseiro de presunto e queijo. Pode variar conforme a disponibilidade do estoque. Não inclui pastel, quibe e mini churros, pois são salgados que precisam ser fritos separadamente."
+        observacao: "Geralmente inclui coxinha de frango, bolinho de carne moída, cigarrete de calabresa, bolinha de queijo e travesseiro de presunto e queijo. Pode variar conforme a disponibilidade do estoque. Não inclui pastel, quibe e mini churros, pois são salgados que precisam ser fritos separadamente."
     },
 
     {
@@ -113,12 +113,12 @@ const produtos = [
 
     {
         id: 9,
-        nome: "Cigarette de calabresa",
+        nome: "Cigarrete de calabresa",
         descricao: "25 unidades",
         lactose: "Contém lactose",
         preco: "20,00",
         categoria: "salgados",
-        emoji: "🌶️",
+        emoji: "", // REMOVIDO: ícone de pimenta
         imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881919131blob"
     },
 
@@ -150,10 +150,32 @@ const produtos = [
 
     {
         id: 12,
-        nome: "Pão de queijo congelado",
+        nome: "Pão de Queijo Tradicional",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "20,00",
+        categoria: "congelados",
+        emoji: "🧀",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719926000761blob",
+        observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
+    },
+    {
+        id: 13,
+        nome: "Pão de Queijo Tradicional",
         descricao: "50 unidades",
         lactose: "Contém lactose",
         preco: "30,00",
+        categoria: "congelados",
+        emoji: "🧀",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719926000761blob",
+        observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
+    },
+    {
+        id: 14,
+        nome: "Pão de Queijo Recheado de Calabresa",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "25,00",
         categoria: "congelados",
         emoji: "🧀",
         imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719926000761blob",
@@ -165,7 +187,7 @@ const produtos = [
     // ========================================================
 
     {
-        id: 13,
+        id: 15,
         nome: "Coca-Cola tradicional",
         descricao: "2 litros",
         lactose: "",
@@ -176,7 +198,7 @@ const produtos = [
     },
 
     {
-        id: 14,
+        id: 16,
         nome: "Coca-Cola Zero",
         descricao: "2 litros",
         lactose: "",
@@ -187,7 +209,7 @@ const produtos = [
     },
 
     {
-        id: 15,
+        id: 17,
         nome: "Guaraná Antarctica",
         descricao: "2 litros",
         lactose: "",
@@ -198,7 +220,7 @@ const produtos = [
     },
 
     {
-        id: 16,
+        id: 18,
         nome: "Guaraná Antarctica",
         descricao: "1 litro",
         lactose: "",
@@ -209,7 +231,7 @@ const produtos = [
     },
 
     {
-        id: 17,
+        id: 19,
         nome: "Coca-Cola tradicional",
         descricao: "1 litro",
         lactose: "",
@@ -220,7 +242,7 @@ const produtos = [
     },
 
     {
-        id: 18,
+        id: 20,
         nome: "Coca-Cola Zero",
         descricao: "1 litro",
         lactose: "",
@@ -643,7 +665,7 @@ function fecharModal() {
 }
 
 function ocultarTodosStepsModal() {
-    const ids = ["modalStep1", "modalStep3", "modalStep4", "modalStepResumo", "modalStepEvento"];
+    const ids = ["modalStep1", "modalStep3", "modalStep4", "modalStepNome", "modalStepEncomenda"];
     ids.forEach(id => {
         const element = document.getElementById(id);
         if (element) element.style.display = "none";
@@ -667,7 +689,7 @@ function initModal() {
     }
 
     // ========================================================
-    // ENTREGA / RETIRADA / AGENDAMENTO
+    // ENTREGA / RETIRADA / ENCOMENDA
     // ========================================================
 
     document.querySelectorAll(".delivery-option").forEach(btn => {
@@ -677,13 +699,14 @@ function initModal() {
             ocultarTodosStepsModal();
 
             if (tipo === "retirada") {
-                const step4 = document.getElementById("modalStep4");
-                if (step4) step4.style.display = "block";
+                const stepNome = document.getElementById("modalStepNome");
+                if (stepNome) stepNome.style.display = "block";
             } else if (tipo === "entrega") {
                 const step3 = document.getElementById("modalStep3");
                 if (step3) step3.style.display = "block";
-            } else if (tipo === "agendado") {
-                exibirFormularioEvento();
+            } else if (tipo === "encomenda") {
+                const stepEncomenda = document.getElementById("modalStepEncomenda");
+                if (stepEncomenda) stepEncomenda.style.display = "block";
             }
         });
     });
@@ -714,6 +737,15 @@ function initModal() {
     const btnEndereco = document.getElementById("modalEnderecoConfirmar");
     if (btnEndereco) {
         btnEndereco.addEventListener("click", confirmarEndereco);
+    }
+
+    // ========================================================
+    // CONFIRMAR ENCOMENDA
+    // ========================================================
+
+    const btnEncomenda = document.getElementById("btnConfirmarEncomenda");
+    if (btnEncomenda) {
+        btnEncomenda.addEventListener("click", confirmarEncomenda);
     }
 
     // ========================================================
@@ -777,6 +809,12 @@ function criarBotaoFinalizar() {
                 alert("Selecione uma forma de pagamento.");
                 return;
             }
+            // Verifica o valor mínimo do pedido (R$ 16,00)
+            const subtotal = getTotalCarrinho();
+            if (subtotal < 16.00) {
+                alert("Pedido mínimo de R$ 16,00.");
+                return;
+            }
             mostrarResumoPedido();
         });
     }
@@ -812,9 +850,96 @@ function confirmarEndereco() {
     };
 
     ocultarTodosStepsModal();
-    const step4 = document.getElementById("modalStep4");
-    if (step4) step4.style.display = "block";
-    if (pedidoAtual.pagamento) criarBotaoFinalizar();
+    const stepNome = document.getElementById("modalStepNome");
+    if (stepNome) stepNome.style.display = "block";
+}
+
+
+// ============================================================
+// ENCOMENDA - FORMULÁRIO SIMPLIFICADO (SEM EVENTOS)
+// ============================================================
+
+function confirmarEncomenda() {
+    // Coleta os dados
+    const data = document.getElementById("encomendaData")?.value;
+    const horarioManha = document.getElementById("encomendaHorario")?.value;
+    const horarioTarde = document.getElementById("encomendaHorarioTarde")?.value;
+    const horario = horarioManha || horarioTarde;
+    const endereco = document.getElementById("encomendaEndereco")?.value.trim();
+    const bairro = document.getElementById("encomendaBairro")?.value.trim();
+    const referencia = document.getElementById("encomendaReferencia")?.value.trim();
+    const nome = document.getElementById("encomendaNome")?.value.trim();
+
+    // Validações
+    if (!data) {
+        alert("Por favor, selecione a data da encomenda.");
+        return;
+    }
+    if (!horario) {
+        alert("Por favor, selecione o horário da encomenda.");
+        return;
+    }
+    if (!endereco) {
+        alert("Por favor, informe o endereço.");
+        return;
+    }
+    if (!bairro) {
+        alert("Por favor, informe o bairro.");
+        return;
+    }
+    if (!nome) {
+        alert("Por favor, informe seu nome.");
+        return;
+    }
+
+    // Verifica pedido mínimo
+    const subtotal = getTotalCarrinho();
+    if (subtotal < 16.00) {
+        alert("Pedido mínimo de R$ 16,00.");
+        return;
+    }
+
+    // Formata a data
+    const dataFormatada = new Date(data + 'T' + horario).toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    // Monta a mensagem
+    let message = " *ENCOMENDA - LE GUST SALGADERIA*\n\n";
+    message += ` *CLIENTE:* ${nome}\n`;
+    message += ` *DATA E HORÁRIO:* ${dataFormatada}\n\n`;
+    
+    message += " *ITENS DA ENCOMENDA:*\n";
+    let subtotalProdutos = 0;
+    carrinho.forEach(item => {
+        const preco = parseFloat(String(item.preco).replace(",", "."));
+        const subtotalItem = preco * item.qtd;
+        subtotalProdutos += subtotalItem;
+        message += `• ${item.qtd}x ${item.nome} = R$ ${subtotalItem.toFixed(2).replace(".", ",")}\n`;
+    });
+
+    message += `\n *SUBTOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+    message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n\n`;
+
+    message += " *LOCAL DA ENCOMENDA:*\n";
+    message += `Endereço: ${endereco}\n`;
+    message += `Bairro: ${bairro}\n`;
+    if (referencia) message += `Referência: ${referencia}\n`;
+
+    message += `\n *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento || 'A definir'}\n`;
+    message += "\n━━━━━━━━━━━━━━━━━━\n";
+    message += " *ENCOMENDA REALIZADA PELO SITE*\n";
+    message += "Aguardando confirmação da Le Gust.";
+
+    openWhatsApp(message);
+    limparCarrinho();
+    pedidoAtual = { tipo: null, endereco: {}, pagamento: null };
+    fecharModal();
+    mostrarToast("Encomenda enviada para o WhatsApp!");
 }
 
 
@@ -1047,76 +1172,6 @@ function confirmarEEnviarPedido() {
     if (campoNome) campoNome.value = "";
     fecharModal();
     mostrarToast("Pedido enviado para o WhatsApp!");
-}
-
-
-// ============================================================
-// EVENTOS / ENCOMENDAS
-// ============================================================
-
-function exibirFormularioEvento() {
-    let containerEvento = document.getElementById("modalStepEvento");
-    if (!containerEvento) {
-        containerEvento = document.createElement("div");
-        containerEvento.id = "modalStepEvento";
-        containerEvento.className = "modal-step";
-        containerEvento.innerHTML = `
-            <h3>🎉 Agendamento de Evento</h3>
-            <p style="color:var(--text-light); margin-bottom:12px;">Preencha os dados do evento para enviarmos seu orçamento.</p>
-            <div class="form-group">
-                <label>Tipo do Evento *</label>
-                <input type="text" id="eventoTipo" placeholder="Ex: Aniversário, Casamento, Reunião" required />
-            </div>
-            <div class="form-group">
-                <label>Quantidade total de salgados *</label>
-                <input type="number" id="eventoQtdSalgados" placeholder="Ex: 200" required />
-            </div>
-            <div class="form-group">
-                <label>Data e Horário *</label>
-                <input type="datetime-local" id="eventoDataHora" required />
-            </div>
-            <div class="form-group">
-                <label>Local / Bairro do Evento *</label>
-                <input type="text" id="eventoLocal" placeholder="Ex: Salão de Festas - Centro" required />
-            </div>
-            <button type="button" class="btn btn-primary btn-full" id="btnEnviarEvento">📲 SOLICITAR ORÇAMENTO NO WHATSAPP</button>
-        `;
-        const modalContent = document.querySelector(".modal-content");
-        if (modalContent) modalContent.appendChild(containerEvento);
-
-        const btnEvento = document.getElementById("btnEnviarEvento");
-        if (btnEvento) btnEvento.addEventListener("click", enviarPedidoEvento);
-    }
-    containerEvento.style.display = "block";
-}
-
-
-// ============================================================
-// ENVIAR EVENTO
-// ============================================================
-
-function enviarPedidoEvento() {
-    const tipo = document.getElementById("eventoTipo")?.value.trim();
-    const qtd = document.getElementById("eventoQtdSalgados")?.value.trim();
-    const dataHora = document.getElementById("eventoDataHora")?.value;
-    const local = document.getElementById("eventoLocal")?.value.trim();
-
-    if (!tipo || !qtd || !dataHora || !local) {
-        alert("Por favor, preencha todos os campos do evento.");
-        return;
-    }
-
-    const dataFormatada = new Date(dataHora).toLocaleString("pt-BR");
-    let msg = " *ORÇAMENTO PARA EVENTO - LE GUST SALGADERIA*\n\n";
-    msg += ` *Tipo do Evento:* ${tipo}\n`;
-    msg += ` *Quantidade:* ${qtd} salgados\n`;
-    msg += ` *Data e Horário:* ${dataFormatada}\n`;
-    msg += ` *Local:* ${local}\n\n`;
-    msg += "Aguardando confirmação de valores e disponibilidade!";
-
-    openWhatsApp(msg);
-    fecharModal();
-    mostrarToast("Solicitação enviada!");
 }
 
 

@@ -30,7 +30,7 @@
                 <a href="#inicio" class="active">Início</a>
                 <a href="delivery.html">Cardápio</a>
                 <a href="delivery.html">Delivery</a>
-                <a href="delivery.html">Encomendas</a>
+                <a href="#encomendas">Encomendas</a>
                 <a href="#contato">Contato</a>
             </nav>
         </div>
@@ -40,7 +40,8 @@
     <section class="hero" id="inicio">
         <div class="container">
             <div class="hero-content">
-                <img src="legustlogo.png" alt="Le' Gust Salgaderia" class="hero-logo" />
+                <!-- FOTO DA FAMÍLIA - MAIOR E MAIS VISÍVEL -->
+                <img src="logolegustrodape.jpeg" alt="Família Le' Gust" class="hero-family-image" />
                 <h1>Salgados feitos para deixar seu momento <span>ainda mais gostoso.</span></h1>
                 <p>Peça para entrega, faça sua encomenda ou fale diretamente com nossa equipe. Atendemos em Parnaíba - PI.</p>
                 <div class="hero-buttons">
@@ -73,7 +74,7 @@
                     <div class="ajuda-icon">📅</div>
                     <h3>Fazer uma encomenda</h3>
                     <p>Vai ter festa, evento ou reunião? Faça sua encomenda com a Le Gust e surpreenda seus convidados.</p>
-                    <a href="#encomendas" class="btn btn-primary">FAZER ENCOMENDA</a>
+                    <a href="#encomendas" class="btn btn-primary encomenda-btn">FAZER ENCOMENDA</a>
                 </div>
                 <div class="ajuda-card">
                     <div class="ajuda-icon">💬</div>
@@ -90,7 +91,7 @@
         <div class="container">
             <div class="sobre-grid">
                 <div class="sobre-image">
-                    <img src="logolegustrodape.jpeg" alt="Salgados Le Gust" loading="lazy" />
+                    <!-- FOTO DO MEIO REMOVIDA - AGORA SÓ TEXTO -->
                 </div>
                 <div class="sobre-content">
                     <span class="tag">Sobre a Le Gust</span>
@@ -115,23 +116,10 @@
             <p class="cardapio-desc">Escolha seus favoritos e faça seu pedido.</p>
 
             <div id="cardapioFilters" class="cardapio-filters">
-
-                <button class="filter-btn active" data-filter="todos">
-                    Todos
-                </button>
-            
-                <button class="filter-btn" data-filter="salgados">
-                    Salgados
-                </button>
-            
-                <button class="filter-btn" data-filter="congelados">
-                    Congelados
-                </button>
-            
-                <button class="filter-btn" data-filter="bebidas">
-                    Bebidas
-                </button>
-            
+                <button class="filter-btn active" data-filter="todos">Todos</button>
+                <button class="filter-btn" data-filter="salgados">Salgados</button>
+                <button class="filter-btn" data-filter="congelados">Congelados</button>
+                <button class="filter-btn" data-filter="bebidas">Bebidas</button>
             </div>
 
             <div class="cardapio-grid" id="cardapioGrid">
@@ -157,19 +145,19 @@
                     <div class="encomenda-icon">🎉</div>
                     <h3>Festas</h3>
                     <p>Salgados para sua comemoração. Atendemos festas de aniversário, casamento e eventos sociais.</p>
-                    <a href="#" class="btn btn-primary" id="encomendaBtn">FAZER ENCOMENDA</a>
+                    <a href="#encomendas" class="btn btn-primary encomenda-btn">FAZER ENCOMENDA</a>
                 </div>
                 <div class="encomenda-card">
                     <div class="encomenda-icon">🎪</div>
                     <h3>Eventos</h3>
                     <p>Quantidades maiores para eventos corporativos, confraternizações e reuniões empresariais.</p>
-                    <a href="#" class="btn btn-primary" id="encomendaBtn2">FAZER ENCOMENDA</a>
+                    <a href="#encomendas" class="btn btn-primary encomenda-btn">FAZER ENCOMENDA</a>
                 </div>
                 <div class="encomenda-card">
                     <div class="encomenda-icon">📋</div>
                     <h3>Personalizado</h3>
                     <p>Consulte opções especiais e personalize sua encomenda de acordo com sua necessidade.</p>
-                    <a href="#" class="btn btn-primary" id="encomendaBtn3">FAZER ENCOMENDA</a>
+                    <a href="#encomendas" class="btn btn-primary encomenda-btn">FAZER ENCOMENDA</a>
                 </div>
             </div>
         </div>
@@ -187,74 +175,68 @@
         </div>
     </section>
 
-<!-- ===== CONTATO ===== -->
-<section class="contato" id="contato">
-    <div class="container">
-        <span class="tag">Contato</span>
-        <h2>Fale com a gente</h2>
-        <p style="color:var(--muted); margin-bottom:48px; max-width:500px; text-align:center; margin-left:auto; margin-right:auto;">
-            Estamos aqui para te atender da melhor forma possível. Escolha o canal mais conveniente para você.
-        </p>
-        
-        <div class="contato-grid">
-            <!-- Informações de Contato -->
-            <div class="contato-info">
-                <!-- Endereço -->
-                <div class="info-item">
-                    <span class="info-icon">📍</span>
-                    <div>
-                        <strong>Endereço</strong>
-                        <p>R. São Benedito, 475 - Planalto<br />Parnaíba - PI, 64207-570</p>
-                        <a href="https://maps.app.goo.gl/LdfaBo8V6873L9gm6" target="_blank" rel="noopener noreferrer" class="contato-link">
-                            📍 Ver no mapa
-                        </a>
+    <!-- ===== CONTATO ===== -->
+    <section class="contato" id="contato">
+        <div class="container">
+            <span class="tag">Contato</span>
+            <h2>Fale com a gente</h2>
+            <p style="color:var(--muted); margin-bottom:48px; max-width:500px; text-align:center; margin-left:auto; margin-right:auto;">
+                Estamos aqui para te atender da melhor forma possível. Escolha o canal mais conveniente para você.
+            </p>
+            
+            <div class="contato-grid">
+                <div class="contato-info">
+                    <div class="info-item">
+                        <span class="info-icon">📍</span>
+                        <div>
+                            <strong>Endereço</strong>
+                            <p>R. São Benedito, 475 - Planalto<br />Parnaíba - PI, 64207-570</p>
+                            <a href="https://maps.app.goo.gl/LdfaBo8V6873L9gm6" target="_blank" rel="noopener noreferrer" class="contato-link">
+                                📍 Ver no mapa
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Horário -->
-                <div class="info-item">
-                    <span class="info-icon">🕐</span>
-                    <div>
-                        <strong>Horário de Funcionamento</strong>
-                        <p>
-                            <span style="display:block;">Segunda a Sábado: <strong>08:00–12:00</strong> | <strong>14:00–19:00</strong></span>
-                            <span style="display:block; color:var(--muted); font-size:0.9rem;">Domingo: Fechado</span>
-                        </p>
+                    <div class="info-item">
+                        <span class="info-icon">🕐</span>
+                        <div>
+                            <strong>Horário de Funcionamento</strong>
+                            <p>
+                                <span style="display:block;">Segunda a Sábado: <strong>08:00–12:00</strong> | <strong>14:00–19:00</strong></span>
+                                <span style="display:block; color:var(--muted); font-size:0.9rem;">Domingo: Fechado</span>
+                            </p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- WhatsApp -->
-                <div class="info-item">
-                    <span class="info-icon">💬</span>
-                    <div>
-                        <strong>WhatsApp</strong>
-                        <p style="font-size:1.1rem; font-weight:700; color:var(--whatsapp);">(86) 98153-2377</p>
-                        <a href="#" id="contatoWhatsapp" class="contato-link whatsapp-link">
-                            💬 Clique para falar conosco
-                        </a>
+                    <div class="info-item">
+                        <span class="info-icon">💬</span>
+                        <div>
+                            <strong>WhatsApp</strong>
+                            <p style="font-size:1.1rem; font-weight:700; color:var(--whatsapp);">(86) 98153-2377</p>
+                            <a href="#" id="contatoWhatsapp" class="contato-link whatsapp-link">
+                                💬 Clique para falar conosco
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Instagram -->
-                <div class="info-item">
-                    <span class="info-icon">📷</span>
-                    <div>
-                        <strong>Instagram</strong>
-                        <p style="font-size:1rem; font-weight:600;">@legustsalgaderia</p>
-                        <a href="https://www.instagram.com/legustsalgaderia/" target="_blank" rel="noopener noreferrer" class="contato-link">
-                            📷 Siga-nos no Instagram
-                        </a>
+                    <div class="info-item">
+                        <span class="info-icon">📷</span>
+                        <div>
+                            <strong>Instagram</strong>
+                            <p style="font-size:1rem; font-weight:600;">@legustsalgaderia</p>
+                            <a href="https://www.instagram.com/legustsalgaderia/" target="_blank" rel="noopener noreferrer" class="contato-link">
+                                📷 Siga-nos no Instagram
+                            </a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Botão WhatsApp em destaque -->
-                <a href="#" id="contatoWhatsapp2" class="btn btn-whatsapp btn-full" style="margin-top:12px;">
-                    💬 FALAR NO WHATSAPP
-                </a>
+                    <a href="#" id="contatoWhatsapp2" class="btn btn-whatsapp btn-full" style="margin-top:12px;">
+                        💬 FALAR NO WHATSAPP
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">

@@ -45,7 +45,7 @@
                 </h1>
                 <div class="loja-status">
                     <span class="status-badge online">🟢 Aberto agora</span>
-                    <span class="pedido-min">Pedido min. R$ 15,00</span>
+                    <span class="pedido-min">Pedido min. R$ 16,00</span>
                     <span class="pedido-min">⏱️ Entrega em 30-45 min</span>
                 </div>
                 <button type="button" class="btn-perfil" onclick="mostrarToast('📍 R. São Benedito, 475 - Planalto, Parnaíba - PI')">
@@ -136,9 +136,9 @@
                         <span class="option-icon">🏪</span>
                         RETIRAR NA LOJA
                     </button>
-                    <button type="button" class="delivery-option" data-tipo="agendado">
+                    <button type="button" class="delivery-option" data-tipo="encomenda">
                         <span class="option-icon">📅</span>
-                        AGENDAR EVENTO / ENCOMENDA
+                        FAZER ENCOMENDA
                     </button>
                 </div>
                 <p style="text-align:center; margin-top:16px; color: var(--text-light); font-size:0.9rem;">
@@ -146,7 +146,102 @@
                 </p>
             </div>
 
-            <!-- STEP 3: Endereço -->
+            <!-- STEP 2: Formulário de Encomenda (sem eventos) -->
+            <div class="modal-step" id="modalStepEncomenda" style="display:none;">
+                <h3>📅 Fazer Encomenda</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Preencha os dados para fazer sua encomenda.
+                </p>
+                
+                <!-- Data -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label for="encomendaData">Data da encomenda *</label>
+                    <input type="date" id="encomendaData" required />
+                </div>
+
+                <!-- Horário -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label>Horário *</label>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+                        <div>
+                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌅 Manhã</strong>
+                            <select id="encomendaHorario" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem;">
+                                <option value="">Selecione</option>
+                                <option value="08:00">08:00</option>
+                                <option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option>
+                                <option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option>
+                                <option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option>
+                            </select>
+                        </div>
+                        <div>
+                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌆 Tarde</strong>
+                            <select id="encomendaHorarioTarde" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem;">
+                                <option value="">Selecione</option>
+                                <option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option>
+                                <option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option>
+                                <option value="16:30">16:30</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endereço simplificado para encomenda -->
+                <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+                    <h4 style="font-size:1rem; margin-bottom:12px;">📍 Local da encomenda</h4>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label for="encomendaEndereco">Endereço *</label>
+                        <input type="text" id="encomendaEndereco" placeholder="Rua, número, complemento" required />
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label for="encomendaBairro">Bairro *</label>
+                        <input type="text" id="encomendaBairro" placeholder="Digite o nome do seu bairro" required style="border-color:var(--primary); border-width:2px;" />
+                    </div>
+                    <div class="form-group">
+                        <label for="encomendaReferencia">Ponto de referência</label>
+                        <input type="text" id="encomendaReferencia" placeholder="Próximo a..." />
+                    </div>
+                </div>
+
+                <!-- Nome do cliente -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label for="encomendaNome">Seu nome *</label>
+                    <input type="text" id="encomendaNome" placeholder="Digite seu nome" required />
+                </div>
+
+                <button type="button" class="btn btn-primary btn-full" id="btnConfirmarEncomenda">
+                    ✅ CONFIRMAR ENCOMENDA
+                </button>
+            </div>
+
+            <!-- STEP: Nome (para entrega/retirada) -->
+            <div class="modal-step" id="modalStepNome" style="display:none;">
+                <h3>👤 Seu nome</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Como podemos te chamar?
+                </p>
+                <div class="form-group">
+                    <label for="clienteNome">Seu nome *</label>
+                    <input
+                        type="text"
+                        id="clienteNome"
+                        placeholder="Digite seu nome"
+                        autocomplete="name"
+                        required
+                    />
+                </div>
+                <button type="button" class="btn btn-primary btn-full" id="modalNomeConfirmar" style="margin-top:16px;">
+                    ✅ Confirmar nome
+                </button>
+            </div>
+
+            <!-- STEP 3: Endereço para entrega -->
             <div class="modal-step" id="modalStep3" style="display:none;">
                 <h3>📍 Endereço de entrega</h3>
                 <form id="modalEnderecoForm" onsubmit="return false;">
@@ -183,28 +278,6 @@
                     </button>
                 </form>
             </div>
-            <div class="form-group">
-                <label for="clienteNome">Seu nome *</label>
-            
-                <input
-                    type="text"
-                    id="clienteNome"
-                    placeholder="Digite seu nome"
-                    autocomplete="name"
-                    required
-                />
-            </div>
-            <div class="modal-step" id="modalStep4" style="display:none;">
-                <h3>💳 Forma de pagamento</h3>
-                <p style="color: var(--text-light); margin-bottom:16px;">
-                    Selecione como deseja pagar seu pedido.
-                </p>
-                <div class="pagamento-opcoes">
-                    <button type="button" class="pagamento-btn" data-pagamento="PIX">✨ PIX</button>
-                    <button type="button" class="pagamento-btn" data-pagamento="Dinheiro">💰 DINHEIRO</button>
-                    <button type="button" class="pagamento-btn" data-pagamento="Cartão">💳 CARTÃO</button>
-                </div>
-                <p id="modalPagamentoSelecionado" style="display:none; margin-top: 12px; font-weight: bold;"></p>
 
             <!-- STEP 4: Pagamento e enviar -->
             <div class="modal-step" id="modalStep4" style="display:none;">
@@ -218,10 +291,7 @@
                     <button type="button" class="pagamento-btn" data-pagamento="Cartão">💳 CARTÃO</button>
                 </div>
                 <p id="modalPagamentoSelecionado" style="display:none; margin-top: 12px; font-weight: bold;"></p>
-
-                <button type="button" class="btn btn-primary btn-full" id="modalEnviarPedido" style="margin-top:16px;">
-                    📤 ENVIAR PEDIDO VIA WHATSAPP
-                </button>
+                <!-- Botão de enviar será injetado dinamicamente -->
             </div>
         </div>
     </div>

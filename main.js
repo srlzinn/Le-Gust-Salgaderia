@@ -53,6 +53,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     // =========================================================
+    // REDIRECIONAMENTO DOS BOTÕES "FAZER ENCOMENDA"
+    // =========================================================
+
+    const encomendaBtns = document.querySelectorAll('.encomenda-btn, .btn[href="#encomendas"]');
+    encomendaBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector('#encomendas');
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+
+    // =========================================================
     // CARDÁPIO OFICIAL LE' GUST
     // =========================================================
 
@@ -77,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
             categoria: "salgados",
             quantidade: "25 unidades",
             preco: "R$ 20,00",
-            obs: "Salgados variados, sem possibilidade de escolha dos sabores."
+            obs: "Salgados variados, sem possibilidade de escolha dos sabores. Geralmente inclui coxinha de frango, bolinho de carne moída, cigarrete de calabresa, bolinha de queijo e travesseiro de presunto e queijo."
         },
 
         {
@@ -136,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
             id: 9,
-            nome: "Cigarette de Calabresa",
+            nome: "Cigarrete de Calabresa", // CORRIGIDO: ortografia
             categoria: "salgados",
             quantidade: "25 unidades",
             preco: "R$ 20,00",
@@ -168,10 +187,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         {
             id: 12,
-            nome: "Pão de Queijo Congelado",
+            nome: "Pão de Queijo Tradicional", // CORRIGIDO
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 20,00",
+            obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
+        },
+
+        {
+            id: 13,
+            nome: "Pão de Queijo Tradicional", // CORRIGIDO
             categoria: "congelados",
             quantidade: "50 unidades",
             preco: "R$ 30,00",
+            obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
+        },
+
+        {
+            id: 14,
+            nome: "Pão de Queijo Recheado de Calabresa", // CORRIGIDO (NOVO)
+            categoria: "congelados",
+            quantidade: "25 unidades",
+            preco: "R$ 25,00",
             obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
         },
 
@@ -181,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // =====================================================
 
         {
-            id: 13,
+            id: 15,
             nome: "Coca-Cola Tradicional",
             categoria: "bebidas",
             quantidade: "2 litros",
@@ -189,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         {
-            id: 14,
+            id: 16,
             nome: "Coca-Cola Zero",
             categoria: "bebidas",
             quantidade: "2 litros",
@@ -197,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         {
-            id: 15,
+            id: 17,
             nome: "Guaraná Antarctica",
             categoria: "bebidas",
             quantidade: "2 litros",
@@ -205,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         {
-            id: 16,
+            id: 18,
             nome: "Guaraná Antarctica",
             categoria: "bebidas",
             quantidade: "1 litro",
@@ -213,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         {
-            id: 17,
+            id: 19,
             nome: "Coca-Cola Tradicional",
             categoria: "bebidas",
             quantidade: "1 litro",
@@ -221,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
         },
 
         {
-            id: 18,
+            id: 20,
             nome: "Coca-Cola Zero",
             categoria: "bebidas",
             quantidade: "1 litro",
@@ -328,6 +365,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     });
+
+
+    // =========================================================
+    // GOOGLE REVIEW
+    // =========================================================
+
+    const googleReviewBtn = document.getElementById("googleReviewBtn");
+    if (googleReviewBtn) {
+        googleReviewBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            // URL da avaliação do Google para o negócio
+            const url = "https://g.page/r/SEU_ID_DO_NEGOCIO/review";
+            window.open(url, "_blank");
+        });
+    }
 
 
     // =========================================================
