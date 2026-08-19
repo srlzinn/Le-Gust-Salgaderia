@@ -181,7 +181,111 @@ const produtos = [
         emoji: "🧀",
         imagem: "./pao-queijo-calabresa.jpeg",
         observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
-        },
+    },
+
+    // ========================================================
+    // NOVOS PRODUTOS CONGELADOS (R$ 16,00 cada - 25 unidades)
+    // ========================================================
+
+    {
+        id: 21,
+        nome: "Coxinha de frango (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🍗",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881994976blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 22,
+        nome: "Quibe com catupiry (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🧆",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881886913blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 23,
+        nome: "Travesseiro de presunto e queijo (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🧀",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881713553blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 24,
+        nome: "Enroladinho de salsicha (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🌭",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881761237blob.webp",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 25,
+        nome: "Bolinho de carne moída (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🥩",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881960383blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 26,
+        nome: "Cigarrete de calabresa (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🌶️",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881919131blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 27,
+        nome: "Bolinha de queijo (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🧀",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/202210262020_MD5K_i",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 28,
+        nome: "Mini churros de doce de leite (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🍩",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/-1719881838990blob",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
+    {
+        id: 29,
+        nome: "Bolinha de carne seca (Congelado)",
+        descricao: "25 unidades",
+        lactose: "Contém lactose",
+        preco: "16,00",
+        categoria: "congelados",
+        emoji: "🥩",
+        imagem: "https://client-assets.anota.ai/produtos/6683175d91ea320019458b0a/202210262022_NS85_i",
+        observacao: "❄️ Produto congelado. Deve ser frito ou assado em casa."
+    },
 
     // ========================================================
     // BEBIDAS
@@ -323,6 +427,36 @@ let pedidoAtual = {
     pagamento: null,
     agendamento: null
 };
+
+
+// ============================================================
+// FUNÇÃO PARA CALCULAR TAXA DE ENTREGA
+// ============================================================
+
+function calcularTaxaEntrega(tipo, endereco) {
+    // Para retirada, taxa é sempre 0
+    if (tipo === "retirada") {
+        return { taxa: 0, texto: "R$ 0,00", calculado: true };
+    }
+    
+    // Para entrega, verifica o bairro
+    if (tipo === "entrega") {
+        if (!endereco || !endereco.bairro) {
+            return { taxa: 0, texto: "A calcular", calculado: false };
+        }
+        
+        const bairroFormatado = endereco.bairro.toLowerCase().trim();
+        const possuiTaxaFixa = BAIRROS_TAXA_FIXA.includes(bairroFormatado);
+        
+        if (possuiTaxaFixa) {
+            return { taxa: 10, texto: "R$ 10,00", calculado: true };
+        } else {
+            return { taxa: 0, texto: "A calcular", calculado: false };
+        }
+    }
+    
+    return { taxa: 0, texto: "R$ 0,00", calculado: true };
+}
 
 
 // ============================================================
@@ -855,19 +989,21 @@ function confirmarEndereco() {
         return;
     }
 
-    const bairroFormatado = bairro.toLowerCase().trim();
-    const possuiTaxaFixa = BAIRROS_TAXA_FIXA.includes(bairroFormatado);
-
+    // Salva o endereço
     pedidoAtual.endereco = {
         rua,
         numero,
         complemento: document.getElementById("modalEnderecoComplemento")?.value.trim() || "",
         bairro,
         cidade: "Parnaíba - PI",
-        referencia: document.getElementById("modalEnderecoReferencia")?.value.trim() || "",
-        taxaFixa: possuiTaxaFixa,
-        valorTaxa: possuiTaxaFixa ? 10 : 0
+        referencia: document.getElementById("modalEnderecoReferencia")?.value.trim() || ""
     };
+
+    // Calcula a taxa de entrega
+    const resultadoTaxa = calcularTaxaEntrega("entrega", pedidoAtual.endereco);
+    pedidoAtual.endereco.taxa = resultadoTaxa.taxa;
+    pedidoAtual.endereco.textoTaxa = resultadoTaxa.texto;
+    pedidoAtual.endereco.taxaCalculada = resultadoTaxa.calculado;
 
     ocultarTodosStepsModal();
     const stepNome = document.getElementById("modalStepNome");
@@ -892,6 +1028,9 @@ function confirmarEncomenda() {
     const numero = document.getElementById("encomendaNumero")?.value.trim();
     const bairro = document.getElementById("encomendaBairro")?.value.trim();
     const referencia = document.getElementById("encomendaReferencia")?.value.trim();
+    const tipoAgendamento = document.getElementById("encomendaTipoEntrega")?.value;
+
+    console.log("📋 Dados coletados:", { nome, data, horario, endereco, numero, bairro, referencia, tipoAgendamento });
 
     // Validações
     if (!nome) {
@@ -908,20 +1047,29 @@ function confirmarEncomenda() {
         alert("Por favor, selecione o horário do agendamento.");
         return;
     }
-    if (!endereco) {
-        alert("Por favor, informe a rua.");
-        document.getElementById("encomendaEndereco")?.focus();
+    if (!tipoAgendamento) {
+        alert("Por favor, selecione se deseja Entrega ou Retirada.");
+        document.getElementById("encomendaTipoEntrega")?.focus();
         return;
     }
-    if (!numero) {
-        alert("Por favor, informe o número da casa.");
-        document.getElementById("encomendaNumero")?.focus();
-        return;
-    }
-    if (!bairro) {
-        alert("Por favor, informe o bairro.");
-        document.getElementById("encomendaBairro")?.focus();
-        return;
+    
+    // Se for entrega, valida endereço
+    if (tipoAgendamento === "entrega") {
+        if (!endereco) {
+            alert("Por favor, informe a rua.");
+            document.getElementById("encomendaEndereco")?.focus();
+            return;
+        }
+        if (!numero) {
+            alert("Por favor, informe o número da casa.");
+            document.getElementById("encomendaNumero")?.focus();
+            return;
+        }
+        if (!bairro) {
+            alert("Por favor, informe o bairro.");
+            document.getElementById("encomendaBairro")?.focus();
+            return;
+        }
     }
 
     // Verifica pedido mínimo
@@ -942,17 +1090,42 @@ function confirmarEncomenda() {
         minute: '2-digit'
     });
 
+    // Calcula a taxa se for entrega
+    let taxa = 0;
+    let textoTaxa = "R$ 0,00";
+    let taxaCalculada = true;
+    let enderecoObj = {};
+
+    if (tipoAgendamento === "entrega") {
+        enderecoObj = {
+            bairro: bairro,
+            rua: endereco,
+            numero: numero,
+            referencia: referencia || "",
+            cidade: "Parnaíba - PI"
+        };
+        const resultado = calcularTaxaEntrega("entrega", enderecoObj);
+        taxa = resultado.taxa;
+        textoTaxa = resultado.texto;
+        taxaCalculada = resultado.calculado;
+        console.log("💰 Taxa calculada:", { taxa, textoTaxa, taxaCalculada });
+    }
+
     // Salva os dados do agendamento
     pedidoAtual.agendamento = {
         nome,
         data,
         horario,
-        endereco,
-        numero,
-        bairro,
+        endereco: endereco || "",
+        numero: numero || "",
+        bairro: bairro || "",
         referencia: referencia || "",
         cidade: "Parnaíba - PI",
-        dataFormatada: dataFormatada
+        dataFormatada: dataFormatada,
+        tipoAgendamento: tipoAgendamento,
+        taxa: taxa,
+        textoTaxa: textoTaxa,
+        taxaCalculada: taxaCalculada
     };
 
     console.log("📅 Agendamento salvo:", pedidoAtual.agendamento);
@@ -969,7 +1142,7 @@ function confirmarEncomenda() {
 
 
 // ============================================================
-// RESUMO DO PEDIDO - COM TAXA APENAS PARA ENTREGA
+// RESUMO DO PEDIDO - COM TAXA DE ENTREGA
 // ============================================================
 
 function mostrarResumoPedido() {
@@ -1005,20 +1178,39 @@ function mostrarResumoPedido() {
     let taxa = 0;
     let textoTaxa = "R$ 0,00";
     let tipoEntrega = "";
+    let taxaCalculada = true;
 
-    // Taxa de entrega APENAS para a opção "entrega"
+    // Calcula a taxa baseada no tipo de entrega
     if (pedidoAtual.tipo === "entrega") {
         tipoEntrega = "🛵 Entrega em casa";
-        if (pedidoAtual.endereco.taxaFixa) {
-            taxa = pedidoAtual.endereco.valorTaxa;
-            textoTaxa = `R$ ${taxa.toFixed(2).replace(".", ",")}`;
+        if (pedidoAtual.endereco && pedidoAtual.endereco.taxa !== undefined) {
+            taxa = pedidoAtual.endereco.taxa || 0;
+            textoTaxa = pedidoAtual.endereco.textoTaxa || "R$ 0,00";
+            taxaCalculada = pedidoAtual.endereco.taxaCalculada !== false;
         } else {
-            textoTaxa = "A calcular";
+            const resultado = calcularTaxaEntrega("entrega", pedidoAtual.endereco);
+            taxa = resultado.taxa;
+            textoTaxa = resultado.texto;
+            taxaCalculada = resultado.calculado;
         }
     } else if (pedidoAtual.tipo === "retirada") {
         tipoEntrega = "🏪 Retirada na loja";
+        taxa = 0;
+        textoTaxa = "R$ 0,00";
+        taxaCalculada = true;
     } else if (pedidoAtual.tipo === "encomenda") {
-        tipoEntrega = "📅 Agendamento";
+        // AGENDAMENTO - verifica se é entrega ou retirada
+        if (pedidoAtual.agendamento && pedidoAtual.agendamento.tipoAgendamento === "entrega") {
+            tipoEntrega = "📅 Agendamento com Entrega";
+            taxa = pedidoAtual.agendamento.taxa || 0;
+            textoTaxa = pedidoAtual.agendamento.textoTaxa || "R$ 0,00";
+            taxaCalculada = pedidoAtual.agendamento.taxaCalculada !== false;
+        } else {
+            tipoEntrega = "📅 Agendamento com Retirada";
+            taxa = 0;
+            textoTaxa = "R$ 0,00";
+            taxaCalculada = true;
+        }
     }
 
     const total = subtotal + taxa;
@@ -1070,13 +1262,13 @@ function mostrarResumoPedido() {
             }).join("")}
         </div>
 
-        <!-- VALORES -->
+        <!-- VALORES COM TAXA -->
         <div style="margin-top:15px; padding:15px; background:#f8f8f8; border-radius:10px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                 <span>Subtotal</span>
                 <strong>R$ ${subtotal.toFixed(2).replace(".", ",")}</strong>
             </div>
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px; ${!taxaCalculada ? 'color:#856404;' : ''}">
                 <span>Taxa de entrega</span>
                 <strong>${textoTaxa}</strong>
             </div>
@@ -1085,6 +1277,12 @@ function mostrarResumoPedido() {
                 <strong>R$ ${total.toFixed(2).replace(".", ",")}</strong>
             </div>
         </div>
+
+        ${!taxaCalculada ? `
+            <div style="margin-top:12px; padding:12px; background:#fff3cd; border-radius:8px; color:#856404;">
+                ⚠️ A taxa de entrega será confirmada pelo atendimento.
+            </div>
+        ` : ""}
 
         <!-- PAGAMENTO -->
         <div style="margin-top:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
@@ -1112,15 +1310,14 @@ function mostrarResumoPedido() {
             <div style="margin-top:15px; padding:12px; background:#f8f8f8; border-radius:8px;">
                 <strong>📅 Agendamento</strong>
                 <p><strong>Data/Horário:</strong> ${pedidoAtual.agendamento?.dataFormatada || "Não informado"}</p>
-                <p><strong>Endereço:</strong> ${pedidoAtual.agendamento?.endereco || ""}, Nº ${pedidoAtual.agendamento?.numero || ""}</p>
-                <p><strong>Bairro:</strong> ${pedidoAtual.agendamento?.bairro || ""}</p>
-                ${pedidoAtual.agendamento?.referencia ? `<p><strong>Referência:</strong> ${pedidoAtual.agendamento.referencia}</p>` : ""}
-            </div>
-        ` : ""}
-
-        ${pedidoAtual.tipo === "entrega" && !pedidoAtual.endereco.taxaFixa ? `
-            <div style="margin-top:12px; padding:12px; background:#fff3cd; border-radius:8px; color:#856404;">
-                ⚠️ A taxa de entrega será confirmada pelo atendimento.
+                <p><strong>Tipo:</strong> ${pedidoAtual.agendamento?.tipoAgendamento === "entrega" ? "Entrega" : "Retirada"}</p>
+                ${pedidoAtual.agendamento?.tipoAgendamento === "entrega" ? `
+                    <p><strong>Endereço:</strong> ${pedidoAtual.agendamento?.endereco || ""}, Nº ${pedidoAtual.agendamento?.numero || ""}</p>
+                    <p><strong>Bairro:</strong> ${pedidoAtual.agendamento?.bairro || ""}</p>
+                    ${pedidoAtual.agendamento?.referencia ? `<p><strong>Referência:</strong> ${pedidoAtual.agendamento.referencia}</p>` : ""}
+                ` : `
+                    <p><strong>Endereço da loja:</strong> ${CONFIG_ENV.endereco}</p>
+                `}
             </div>
         ` : ""}
 
@@ -1158,7 +1355,7 @@ function mostrarResumoPedido() {
 
 
 // ============================================================
-// ENVIAR PEDIDO PARA WHATSAPP
+// ENVIAR PEDIDO PARA WHATSAPP - COM TAXA
 // ============================================================
 
 function confirmarEEnviarPedido() {
@@ -1201,19 +1398,53 @@ function confirmarEEnviarPedido() {
         message += `• ${item.qtd}x ${item.nome} = R$ ${subtotal.toFixed(2).replace(".", ",")}\n`;
     });
 
+    // Calcula a taxa de entrega
+    let taxa = 0;
+    let textoTaxa = "R$ 0,00";
+    let taxaCalculada = true;
+    let tipoEntregaTexto = "";
+
+    if (pedidoAtual.tipo === "entrega") {
+        tipoEntregaTexto = "ENTREGA EM CASA";
+        if (pedidoAtual.endereco && pedidoAtual.endereco.taxa !== undefined) {
+            taxa = pedidoAtual.endereco.taxa || 0;
+            textoTaxa = pedidoAtual.endereco.textoTaxa || "R$ 0,00";
+            taxaCalculada = pedidoAtual.endereco.taxaCalculada !== false;
+        } else {
+            const resultado = calcularTaxaEntrega("entrega", pedidoAtual.endereco);
+            taxa = resultado.taxa;
+            textoTaxa = resultado.texto;
+            taxaCalculada = resultado.calculado;
+        }
+    } else if (pedidoAtual.tipo === "retirada") {
+        tipoEntregaTexto = "RETIRADA NA LOJA";
+        taxa = 0;
+        textoTaxa = "R$ 0,00";
+        taxaCalculada = true;
+    } else if (pedidoAtual.tipo === "encomenda") {
+        if (pedidoAtual.agendamento && pedidoAtual.agendamento.tipoAgendamento === "entrega") {
+            tipoEntregaTexto = "AGENDAMENTO COM ENTREGA";
+            taxa = pedidoAtual.agendamento.taxa || 0;
+            textoTaxa = pedidoAtual.agendamento.textoTaxa || "R$ 0,00";
+            taxaCalculada = pedidoAtual.agendamento.taxaCalculada !== false;
+        } else {
+            tipoEntregaTexto = "AGENDAMENTO COM RETIRADA";
+            taxa = 0;
+            textoTaxa = "R$ 0,00";
+            taxaCalculada = true;
+        }
+    }
+
+    const totalFinal = subtotalProdutos + taxa;
+
     message += `\n *SUBTOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
 
-    // RETIRADA
-    if (pedidoAtual.tipo === "retirada") {
-        message += "\n *OPÇÃO:* RETIRADA NA LOJA\n";
-        message += ` *ENDEREÇO:* ${CONFIG_ENV.endereco}\n`;
-        message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
-    }
+    // INFORMAÇÕES DO PEDIDO
+    message += `\n *OPÇÃO:* ${tipoEntregaTexto}\n`;
 
     // ENTREGA
     if (pedidoAtual.tipo === "entrega") {
         const end = pedidoAtual.endereco;
-        message += "\n *OPÇÃO:* ENTREGA EM CASA\n";
         message += "\n *ENDEREÇO DE ENTREGA:*\n";
         message += `Rua: ${end.rua}, Nº ${end.numero}\n`;
         if (end.complemento) message += `Complemento: ${end.complemento}\n`;
@@ -1221,36 +1452,50 @@ function confirmarEEnviarPedido() {
         message += `Cidade: ${end.cidade}\n`;
         if (end.referencia) message += `Referência: ${end.referencia}\n`;
 
-        if (end.taxaFixa) {
-            const totalFinal = subtotalProdutos + end.valorTaxa;
-            message += "\n *TAXA DE ENTREGA:* R$ 10,00\n";
-            message += ` *TOTAL FINAL:* R$ ${totalFinal.toFixed(2).replace(".", ",")}\n`;
-        } else {
-            message += "\n *TAXA DE ENTREGA:* A CALCULAR\n";
-            message += " A taxa será confirmada pelo atendimento.\n";
-            message += ` *TOTAL PARCIAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+        message += `\n *TAXA DE ENTREGA:* ${textoTaxa}\n`;
+        message += ` *TOTAL FINAL:* R$ ${totalFinal.toFixed(2).replace(".", ",")}\n`;
+        
+        if (!taxaCalculada) {
+            message += "\n *OBS:* A taxa de entrega será confirmada pelo atendimento.\n";
         }
     }
 
-    // AGENDAMENTO / ENCOMENDA
+    // RETIRADA
+    if (pedidoAtual.tipo === "retirada") {
+        message += `\n *ENDEREÇO:* ${CONFIG_ENV.endereco}\n`;
+        message += ` *TAXA DE ENTREGA:* R$ 0,00\n`;
+        message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+    }
+
+    // AGENDAMENTO
     if (pedidoAtual.tipo === "encomenda") {
         const ag = pedidoAtual.agendamento;
-        message += "\n *OPÇÃO:* AGENDAMENTO\n";
-        message += ` *DATA E HORÁRIO:* ${ag?.dataFormatada || "Não informado"}\n\n`;
+        message += `\n *DATA E HORÁRIO:* ${ag?.dataFormatada || "Não informado"}\n`;
         
-        message += " *ENDEREÇO:*\n";
-        message += `${ag?.endereco || "Não informado"}, Nº ${ag?.numero || ""}\n`;
-        message += `Bairro: ${ag?.bairro || "Não informado"}\n`;
-        message += `Cidade: Parnaíba - PI\n`;
-        if (ag?.referencia) message += `Referência: ${ag.referencia}\n`;
-        
-        message += `\n *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+        if (ag?.tipoAgendamento === "entrega") {
+            message += "\n *ENDEREÇO DE ENTREGA:*\n";
+            message += `${ag?.endereco || "Não informado"}, Nº ${ag?.numero || ""}\n`;
+            message += `Bairro: ${ag?.bairro || "Não informado"}\n`;
+            message += `Cidade: Parnaíba - PI\n`;
+            if (ag?.referencia) message += `Referência: ${ag.referencia}\n`;
+            message += `\n *TAXA DE ENTREGA:* ${textoTaxa}\n`;
+            message += ` *TOTAL FINAL:* R$ ${totalFinal.toFixed(2).replace(".", ",")}\n`;
+            if (!taxaCalculada) {
+                message += "\n *OBS:* A taxa de entrega será confirmada pelo atendimento.\n";
+            }
+        } else {
+            message += `\n *ENDEREÇO DA LOJA:* ${CONFIG_ENV.endereco}\n`;
+            message += ` *TAXA DE ENTREGA:* R$ 0,00\n`;
+            message += ` *TOTAL:* R$ ${subtotalProdutos.toFixed(2).replace(".", ",")}\n`;
+        }
     }
 
     message += ` *FORMA DE PAGAMENTO:* ${pedidoAtual.pagamento}\n`;
     message += "\n━━━━━━━━━━━━━━━━━━\n";
     message += " *PEDIDO REALIZADO PELO SITE*\n";
     message += "Aguardando confirmação da Le Gust.";
+
+    console.log("📨 Mensagem do WhatsApp:", message);
 
     openWhatsApp(message);
     limparCarrinho();
