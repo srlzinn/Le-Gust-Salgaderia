@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
             nome: "Pão de Queijo Tradicional", // CORRIGIDO
             categoria: "congelados",
             quantidade: "50 unidades",
-            preco: "R$ 30,00",
+            preco: "R$ 35,00",
             obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
         },
 
@@ -208,7 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
             nome: "Pão de Queijo Recheado de Calabresa", // CORRIGIDO (NOVO)
             categoria: "congelados",
             quantidade: "25 unidades",
-            preco: "R$ 25,00",
+            preco: "R$ 20,00",
             obs: "Contém lactose. Produto congelado e não assado. O cliente deve assar em casa."
         },
 
