@@ -124,9 +124,12 @@
             <button type="button" class="modal-close" id="modalClose">&times;</button>
             <h2>📋 Finalizar Pedido</h2>
             
-            <!-- STEP 1: Opções de entrega -->
+            <!-- STEP 1: Forma de recebimento -->
             <div class="modal-step" id="modalStep1">
-                <h3>Como você quer receber?</h3>
+                <h3>📦 Como você quer receber?</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Escolha a forma de recebimento do seu pedido.
+                </p>
                 <div class="delivery-options">
                     <button type="button" class="delivery-option" data-tipo="entrega">
                         <span class="option-icon">🛵</span>
@@ -136,156 +139,39 @@
                         <span class="option-icon">🏪</span>
                         RETIRAR NA LOJA
                     </button>
-                    <button type="button" class="delivery-option" data-tipo="encomenda">
-                        <span class="option-icon">📅</span>
-                        FAZER AGENDAMENTO
-                    </button>
                 </div>
                 <p style="text-align:center; margin-top:16px; color: var(--text-light); font-size:0.9rem;">
                     Escolha a melhor opção para você
                 </p>
             </div>
 
-            <!-- STEP: Formulário de Agendamento/Encomenda -->
-            <div class="modal-step" id="modalStepEncomenda" style="display:none;">
-                <h3>📅 Fazer Agendamento</h3>
+            <!-- STEP 2: Quando você precisa? -->
+            <div class="modal-step" id="modalStepQuando" style="display:none;">
+                <h3>⏰ Quando você precisa do seu pedido?</h3>
                 <p style="color: var(--text-light); margin-bottom:16px;">
-                    Preencha os dados para fazer seu agendamento.
+                    Selecione se deseja receber agora ou agendar para outro horário.
                 </p>
-                
-                <!-- Nome -->
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label for="encomendaNome">Seu nome *</label>
-                    <input type="text" id="encomendaNome" placeholder="Digite seu nome completo" required />
+                <div class="quando-options">
+                    <button type="button" class="quando-option" data-quando="agora">
+                        <span class="option-icon">⚡</span>
+                        PARA AGORA
+                        <small style="display:block; color:var(--text-light); font-size:0.8rem; margin-top:4px;">Entrega em 30-45 min</small>
+                    </button>
+                    <button type="button" class="quando-option" data-quando="agendado">
+                        <span class="option-icon">📅</span>
+                        AGENDAR PARA OUTRO HORÁRIO
+                        <small style="display:block; color:var(--text-light); font-size:0.8rem; margin-top:4px;">Escolha data e horário</small>
+                    </button>
                 </div>
-
-                <!-- Data -->
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label for="encomendaData">Data da encomenda *</label>
-                    <input type="date" id="encomendaData" required />
-                </div>
-
-                <!-- Horário -->
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label>Horário * (selecione apenas um)</label>
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
-                        <div>
-                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌅 Manhã</strong>
-                            <select id="encomendaHorario" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
-                                <option value="">Selecione</option>
-                                <option value="08:00">08:00</option>
-                                <option value="08:30">08:30</option>
-                                <option value="09:00">09:00</option>
-                                <option value="09:30">09:30</option>
-                                <option value="10:00">10:00</option>
-                                <option value="10:30">10:30</option>
-                                <option value="11:00">11:00</option>
-                                <option value="11:30">11:30</option>
-                                <option value="12:00">12:00</option>
-                            </select>
-                        </div>
-                        <div>
-                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌆 Tarde</strong>
-                            <select id="encomendaHorarioTarde" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
-                                <option value="">Selecione</option>
-                                <option value="14:30">14:30</option>
-                                <option value="15:00">15:00</option>
-                                <option value="15:30">15:30</option>
-                                <option value="16:00">16:00</option>
-                                <option value="16:30">16:30</option>
-                                <option value="17:00">17:00</option>
-                                <option value="17:30">17:30</option>
-                                <option value="18:00">18:00</option>
-                                <option value="18:30">18:30</option>
-                                <option value="19:00">19:00</option>
-                            </select>
-                        </div>
-                    </div>
-                    <p style="font-size:0.8rem; color:#856404; margin-top:6px;">⚠️ Selecione apenas um horário (Manhã ou Tarde)</p>
-                </div>
-
-                <!-- TIPO DE AGENDAMENTO: ENTREGA ou RETIRADA -->
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label style="display:block; margin-bottom:8px; font-weight:600;">Tipo de agendamento *</label>
-                    <div style="display:flex; gap:16px; flex-wrap:wrap;">
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:12px 20px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); background:white; transition:all 0.3s;">
-                            <input type="radio" name="tipoAgendamento" value="entrega" id="agendamentoEntrega" />
-                            <span>🛵 Entrega</span>
-                        </label>
-                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:12px 20px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); background:white; transition:all 0.3s;">
-                            <input type="radio" name="tipoAgendamento" value="retirada" id="agendamentoRetirada" />
-                            <span>🏪 Retirada</span>
-                        </label>
-                    </div>
-                    <p id="tipoAgendamentoError" style="color:#dc3545; font-size:0.85rem; margin-top:6px; display:none;">Selecione se deseja Entrega ou Retirada.</p>
-                </div>
-
-                <!-- CAMPOS CONDICIONAIS: Endereço para ENTREGA -->
-                <div id="camposEntrega" style="display:none;">
-                    <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
-                        <h4 style="font-size:1rem; margin-bottom:12px;">📍 Endereço de entrega</h4>
-                        <div class="form-group" style="margin-bottom:12px;">
-                            <label for="encomendaEndereco">Rua *</label>
-                            <input type="text" id="encomendaEndereco" placeholder="Digite o nome da rua" />
-                        </div>
-                        <div class="form-group" style="margin-bottom:12px;">
-                            <label for="encomendaNumero">Número *</label>
-                            <input type="text" id="encomendaNumero" placeholder="Número da casa" />
-                        </div>
-                        <div class="form-group" style="margin-bottom:12px;">
-                            <label for="encomendaBairro">Bairro *</label>
-                            <input type="text" id="encomendaBairro" placeholder="Digite o nome do seu bairro" style="border-color:var(--primary); border-width:2px;" />
-                        </div>
-                        <div class="form-group">
-                            <label for="encomendaReferencia">Ponto de referência</label>
-                            <input type="text" id="encomendaReferencia" placeholder="Próximo a..." />
-                        </div>
-                    </div>
-                    <p id="enderecoError" style="color:#dc3545; font-size:0.85rem; margin-top:-10px; margin-bottom:12px; display:none;">Por favor, preencha todos os campos de endereço.</p>
-                </div>
-
-                <!-- CAMPOS CONDICIONAIS: Retirada na loja -->
-                <div id="camposRetirada" style="display:none;">
-                    <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
-                        <h4 style="font-size:1rem; margin-bottom:8px;">🏪 Retirada na loja</h4>
-                        <p style="color:var(--text-light); margin-bottom:4px;">
-                            <strong>Endereço da loja:</strong> R. São Benedito, 475 - Planalto, Parnaíba - PI
-                        </p>
-                        <p style="color:var(--text-light); font-size:0.9rem;">
-                            ⏱️ Retire seu pedido na data e horário agendados.
-                        </p>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-primary btn-full" id="btnConfirmarEncomenda">
-                    ✅ CONFIRMAR AGENDAMENTO
-                </button>
-            </div>
-
-            <!-- STEP: Nome (para entrega/retirada) -->
-            <div class="modal-step" id="modalStepNome" style="display:none;">
-                <h3>👤 Seu nome</h3>
-                <p style="color: var(--text-light); margin-bottom:16px;">
-                    Como podemos te chamar?
-                </p>
-                <div class="form-group">
-                    <label for="clienteNome">Seu nome *</label>
-                    <input
-                        type="text"
-                        id="clienteNome"
-                        placeholder="Digite seu nome"
-                        autocomplete="name"
-                        required
-                    />
-                </div>
-                <button type="button" class="btn btn-primary btn-full" id="modalNomeConfirmar" style="margin-top:16px;">
-                    ✅ Confirmar nome
-                </button>
+                <p id="quandoError" style="color:#dc3545; font-size:0.85rem; margin-top:12px; display:none; text-align:center;">Por favor, selecione uma opção.</p>
             </div>
 
             <!-- STEP 3: Endereço para entrega -->
-            <div class="modal-step" id="modalStep3" style="display:none;">
+            <div class="modal-step" id="modalStepEndereco" style="display:none;">
                 <h3>📍 Endereço de entrega</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Preencha o endereço para receber seu pedido.
+                </p>
                 <form id="modalEnderecoForm" onsubmit="return false;">
                     <div class="form-row">
                         <div class="form-group full">
@@ -321,8 +207,94 @@
                 </form>
             </div>
 
-            <!-- STEP 4: Pagamento e enviar -->
-            <div class="modal-step" id="modalStep4" style="display:none;">
+            <!-- STEP 4: Agendamento (data e horário) -->
+            <div class="modal-step" id="modalStepAgendamento" style="display:none;">
+                <h3>📅 Agendar Pedido</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Escolha a data e horário para o seu pedido.
+                </p>
+                
+                <!-- Data -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label for="agendamentoData">Data *</label>
+                    <input type="date" id="agendamentoData" required />
+                </div>
+
+                <!-- Horário -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label>Horário * (selecione apenas um)</label>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
+                        <div>
+                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌅 Manhã</strong>
+                            <select id="agendamentoHorario" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
+                                <option value="">Selecione</option>
+                                <option value="08:00">08:00</option>
+                                <option value="08:30">08:30</option>
+                                <option value="09:00">09:00</option>
+                                <option value="09:30">09:30</option>
+                                <option value="10:00">10:00</option>
+                                <option value="10:30">10:30</option>
+                                <option value="11:00">11:00</option>
+                                <option value="11:30">11:30</option>
+                                <option value="12:00">12:00</option>
+                            </select>
+                        </div>
+                        <div>
+                            <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌆 Tarde</strong>
+                            <select id="agendamentoHorarioTarde" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
+                                <option value="">Selecione</option>
+                                <option value="14:30">14:30</option>
+                                <option value="15:00">15:00</option>
+                                <option value="15:30">15:30</option>
+                                <option value="16:00">16:00</option>
+                                <option value="16:30">16:30</option>
+                                <option value="17:00">17:00</option>
+                                <option value="17:30">17:30</option>
+                                <option value="18:00">18:00</option>
+                                <option value="18:30">18:30</option>
+                                <option value="19:00">19:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p style="font-size:0.8rem; color:#856404; margin-top:6px;">⚠️ Selecione apenas um horário (Manhã ou Tarde)</p>
+                </div>
+
+                <!-- Se for retirada, mostrar endereço da loja -->
+                <div id="agendamentoRetiradaInfo" style="display:none; background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+                    <h4 style="font-size:1rem; margin-bottom:8px;">🏪 Retirada na loja</h4>
+                    <p style="color:var(--text-light);">
+                        <strong>Endereço:</strong> R. São Benedito, 475 - Planalto, Parnaíba - PI
+                    </p>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-full" id="btnConfirmarAgendamento">
+                    ✅ CONFIRMAR AGENDAMENTO
+                </button>
+            </div>
+
+            <!-- STEP: Nome (para entrega/retirada) -->
+            <div class="modal-step" id="modalStepNome" style="display:none;">
+                <h3>👤 Seu nome</h3>
+                <p style="color: var(--text-light); margin-bottom:16px;">
+                    Como podemos te chamar?
+                </p>
+                <div class="form-group">
+                    <label for="clienteNome">Seu nome *</label>
+                    <input
+                        type="text"
+                        id="clienteNome"
+                        placeholder="Digite seu nome"
+                        autocomplete="name"
+                        required
+                    />
+                </div>
+                <button type="button" class="btn btn-primary btn-full" id="modalNomeConfirmar" style="margin-top:16px;">
+                    ✅ Confirmar nome
+                </button>
+            </div>
+
+            <!-- STEP: Pagamento e enviar -->
+            <div class="modal-step" id="modalStepPagamento" style="display:none;">
                 <h3>💳 Forma de pagamento</h3>
                 <p style="color: var(--text-light); margin-bottom:16px;">
                     Selecione como deseja pagar seu pedido.
@@ -333,10 +305,9 @@
                     <button type="button" class="pagamento-btn" data-pagamento="Cartão">💳 CARTÃO</button>
                 </div>
                 <p id="modalPagamentoSelecionado" style="display:none; margin-top: 12px; font-weight: bold;"></p>
-                <!-- Botão de enviar será injetado dinamicamente -->
             </div>
 
-            <!-- STEP 5: Resumo do Pedido (será criado dinamicamente) -->
+            <!-- STEP: Resumo do Pedido -->
             <div class="modal-step" id="modalStepResumo" style="display:none;">
                 <!-- Conteúdo gerado pelo JavaScript -->
             </div>

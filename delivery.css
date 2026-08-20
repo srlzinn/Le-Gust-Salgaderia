@@ -19,6 +19,11 @@
     --whatsapp: #25D366;
     --font: 'Lato', sans-serif;
     --font-display: 'Playfair Display', serif;
+    --success: #28a745;
+    --success-light: #d4edda;
+    --warning: #ffc107;
+    --warning-light: #fff3cd;
+    --danger: #dc3545;
 }
 
 * {
@@ -705,9 +710,10 @@ body {
     }
 }
 
+/* ===== OPÇÕES DE ENTREGA ===== */
 .delivery-options {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
@@ -742,7 +748,49 @@ body {
     margin-bottom: 8px;
 }
 
-/* ===== FORMULÁRIO ENDEREÇO ===== */
+/* ===== OPÇÕES "QUANDO" ===== */
+.quando-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.quando-option {
+    background: var(--cream);
+    border: 2px solid transparent;
+    border-radius: var(--radius-sm);
+    padding: 24px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text);
+    font-family: var(--font);
+}
+
+.quando-option:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+}
+
+.quando-option.selected {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--white);
+}
+
+.quando-option .option-icon {
+    display: block;
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.quando-option small {
+    font-weight: 400;
+}
+
+/* ===== FORMULÁRIO ===== */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -766,16 +814,19 @@ body {
     margin-bottom: 4px;
 }
 
-.form-group input {
+.form-group input,
+.form-group select {
     padding: 12px 16px;
     border: 2px solid var(--gray-dark);
     border-radius: var(--radius-sm);
     font-size: 0.95rem;
     transition: var(--transition);
     font-family: var(--font);
+    background: var(--white);
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus {
     border-color: var(--primary);
     outline: none;
     box-shadow: 0 0 0 4px var(--primary-light);
@@ -783,6 +834,16 @@ body {
 
 .form-group input:read-only {
     background: var(--cream);
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: auto;
+    -webkit-appearance: auto;
+}
+
+.form-group select option {
+    padding: 8px;
 }
 
 /* ===== PAGAMENTO ===== */
@@ -937,6 +998,19 @@ body {
     margin-bottom: 8px;
 }
 
+/* ===== STATUS DO PEDIDO (DESTAQUE) ===== */
+.pedido-status-imediato {
+    background: var(--success-light);
+    border: 2px solid var(--success);
+    color: #155724;
+}
+
+.pedido-status-agendado {
+    background: var(--warning-light);
+    border: 2px solid var(--warning);
+    color: #856404;
+}
+
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .delivery-page {
@@ -993,7 +1067,8 @@ body {
         border-top: 1px solid var(--gray);
     }
 
-    .delivery-options {
+    .delivery-options,
+    .quando-options {
         grid-template-columns: 1fr;
     }
 
@@ -1074,5 +1149,14 @@ body {
     .cart-item-imagem {
         width: 40px;
         height: 40px;
+    }
+
+    .quando-option {
+        padding: 16px 12px;
+        font-size: 0.85rem;
+    }
+
+    .quando-option .option-icon {
+        font-size: 1.8rem;
     }
 }
