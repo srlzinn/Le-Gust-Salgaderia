@@ -145,7 +145,7 @@ const produtos = [
     },
 
     // ========================================================
-    // CONGELADOS
+    // CONGELADOS (mantidos os já existentes)
     // ========================================================
 
     {
@@ -460,6 +460,46 @@ function calcularTaxaEntrega(tipo, endereco) {
 
 
 // ============================================================
+// FUNÇÃO PARA MOSTRAR/ESCONDER CAMPOS CONDICIONAIS DO AGENDAMENTO
+// ============================================================
+
+function toggleCamposAgendamento() {
+    const tipoEntregaRadio = document.querySelector('input[name="tipoAgendamento"]:checked');
+    const tipoAgendamento = tipoEntregaRadio ? tipoEntregaRadio.value : null;
+    
+    const camposEntrega = document.getElementById("camposEntrega");
+    const camposRetirada = document.getElementById("camposRetirada");
+    const enderecoError = document.getElementById("enderecoError");
+    
+    // Oculta todos
+    if (camposEntrega) camposEntrega.style.display = "none";
+    if (camposRetirada) camposRetirada.style.display = "none";
+    if (enderecoError) enderecoError.style.display = "none";
+    
+    // Mostra o campo correspondente
+    if (tipoAgendamento === "entrega") {
+        if (camposEntrega) camposEntrega.style.display = "block";
+        // Torna os campos obrigatórios
+        const enderecoInput = document.getElementById("encomendaEndereco");
+        const numeroInput = document.getElementById("encomendaNumero");
+        const bairroInput = document.getElementById("encomendaBairro");
+        if (enderecoInput) enderecoInput.required = true;
+        if (numeroInput) numeroInput.required = true;
+        if (bairroInput) bairroInput.required = true;
+    } else if (tipoAgendamento === "retirada") {
+        if (camposRetirada) camposRetirada.style.display = "block";
+        // Remove a obrigatoriedade dos campos de endereço
+        const enderecoInput = document.getElementById("encomendaEndereco");
+        const numeroInput = document.getElementById("encomendaNumero");
+        const bairroInput = document.getElementById("encomendaBairro");
+        if (enderecoInput) enderecoInput.required = false;
+        if (numeroInput) numeroInput.required = false;
+        if (bairroInput) bairroInput.required = false;
+    }
+}
+
+
+// ============================================================
 // INICIALIZAÇÃO
 // ============================================================
 
@@ -471,9 +511,23 @@ document.addEventListener("DOMContentLoaded", function () {
     initCarrinho();
     initModal();
     initAjuda();
+    initAgendamentoRadios();
     atualizarCarrinhoUI();
     console.log("✅ Delivery inicializado!");
 });
+
+
+// ============================================================
+// INICIALIZAÇÃO DOS RADIO BUTTONS DO AGENDAMENTO
+// ============================================================
+
+function initAgendamentoRadios() {
+    document.querySelectorAll('input[name="tipoAgendamento"]').forEach(radio => {
+        radio.addEventListener("change", function() {
+            toggleCamposAgendamento();
+        });
+    });
+}
 
 
 // ============================================================
@@ -853,6 +907,8 @@ function initModal() {
                 if (stepEncomenda) {
                     console.log("📅 Mostrando formulário de agendamento");
                     stepEncomenda.style.display = "block";
+                    // Garante que os campos condicionais estejam no estado inicial
+                    toggleCamposAgendamento();
                 } else {
                     console.error("❌ modalStepEncomenda não encontrado!");
                 }
@@ -1012,67 +1068,98 @@ function confirmarEndereco() {
 
 
 // ============================================================
-// CONFIRMAR ENCOMENDA (Agendamento)
+// CONFIRMAR ENCOMENDA (Agendamento) - COM ENTREGA OU RETIRADA
 // ============================================================
 
 function confirmarEncomenda() {
     console.log("📝 Validando formulário de agendamento...");
     
-    // Coleta os dados
+    // Coleta os dados básicos
     const nome = document.getElementById("encomendaNome")?.value.trim();
     const data = document.getElementById("encomendaData")?.value;
     const horarioManha = document.getElementById("encomendaHorario")?.value;
     const horarioTarde = document.getElementById("encomendaHorarioTarde")?.value;
     const horario = horarioManha || horarioTarde;
-    const endereco = document.getElementById("encomendaEndereco")?.value.trim();
-    const numero = document.getElementById("encomendaNumero")?.value.trim();
-    const bairro = document.getElementById("encomendaBairro")?.value.trim();
-    const referencia = document.getElementById("encomendaReferencia")?.value.trim();
-    const tipoAgendamento = document.getElementById("encomendaTipoEntrega")?.value;
+    
+    // Captura o tipo de agendamento (radio button)
+    const tipoEntregaRadio = document.querySelector('input[name="tipoAgendamento"]:checked');
+    const tipoAgendamento = tipoEntregaRadio ? tipoEntregaRadio.value : null;
+    
+    console.log("📋 Dados coletados:", { nome, data, horario, tipoAgendamento });
 
-    console.log("📋 Dados coletados:", { nome, data, horario, endereco, numero, bairro, referencia, tipoAgendamento });
+    // ========================================================
+    // VALIDAÇÕES
+    // ========================================================
 
-    // Validações
+    // 1. Valida nome
     if (!nome) {
         alert("Por favor, informe seu nome.");
         document.getElementById("encomendaNome")?.focus();
         return;
     }
+
+    // 2. Valida data
     if (!data) {
         alert("Por favor, selecione a data do agendamento.");
         document.getElementById("encomendaData")?.focus();
         return;
     }
+
+    // 3. Valida horário
     if (!horario) {
         alert("Por favor, selecione o horário do agendamento.");
         return;
     }
+
+    // 4. Valida tipo de agendamento (entrega ou retirada)
     if (!tipoAgendamento) {
+        document.getElementById("tipoAgendamentoError").style.display = "block";
         alert("Por favor, selecione se deseja Entrega ou Retirada.");
-        document.getElementById("encomendaTipoEntrega")?.focus();
         return;
+    } else {
+        document.getElementById("tipoAgendamentoError").style.display = "none";
     }
-    
-    // Se for entrega, valida endereço
+
+    // ========================================================
+    // VALIDAÇÃO PARA ENTREGA
+    // ========================================================
+
+    let endereco = "";
+    let numero = "";
+    let bairro = "";
+    let referencia = "";
+
     if (tipoAgendamento === "entrega") {
+        endereco = document.getElementById("encomendaEndereco")?.value.trim();
+        numero = document.getElementById("encomendaNumero")?.value.trim();
+        bairro = document.getElementById("encomendaBairro")?.value.trim();
+        referencia = document.getElementById("encomendaReferencia")?.value.trim();
+
         if (!endereco) {
+            document.getElementById("enderecoError").style.display = "block";
             alert("Por favor, informe a rua.");
             document.getElementById("encomendaEndereco")?.focus();
             return;
         }
         if (!numero) {
+            document.getElementById("enderecoError").style.display = "block";
             alert("Por favor, informe o número da casa.");
             document.getElementById("encomendaNumero")?.focus();
             return;
         }
         if (!bairro) {
+            document.getElementById("enderecoError").style.display = "block";
             alert("Por favor, informe o bairro.");
             document.getElementById("encomendaBairro")?.focus();
             return;
         }
+        document.getElementById("enderecoError").style.display = "none";
     }
 
-    // Verifica pedido mínimo
+    // ========================================================
+    // VALIDAÇÃO PEDIDO MÍNIMO
+    // ========================================================
+
     const subtotal = getTotalCarrinho();
     if (subtotal < 16.00) {
         alert("Pedido mínimo de R$ 16,00.");
@@ -1080,6 +1167,10 @@ function confirmarEncomenda() {
     }
 
     console.log("✅ Todos os campos validados!");
+
+    // ========================================================
+    // FORMATAÇÃO DOS DADOS
+    // ========================================================
 
     // Formata a data para exibição
     const dataFormatada = new Date(data + 'T' + horario).toLocaleString('pt-BR', {
@@ -1111,7 +1202,10 @@ function confirmarEncomenda() {
         console.log("💰 Taxa calculada:", { taxa, textoTaxa, taxaCalculada });
     }
 
-    // Salva os dados do agendamento
+    // ========================================================
+    // SALVA OS DADOS DO AGENDAMENTO
+    // ========================================================
+
     pedidoAtual.agendamento = {
         nome,
         data,
@@ -1122,7 +1216,7 @@ function confirmarEncomenda() {
         referencia: referencia || "",
         cidade: "Parnaíba - PI",
         dataFormatada: dataFormatada,
-        tipoAgendamento: tipoAgendamento,
+        tipoAgendamento: tipoAgendamento, // 'entrega' ou 'retirada'
         taxa: taxa,
         textoTaxa: textoTaxa,
         taxaCalculada: taxaCalculada
@@ -1130,7 +1224,10 @@ function confirmarEncomenda() {
 
     console.log("📅 Agendamento salvo:", pedidoAtual.agendamento);
 
-    // Avança para o step de pagamento
+    // ========================================================
+    // AVANÇA PARA O STEP DE PAGAMENTO
+    // ========================================================
+
     ocultarTodosStepsModal();
     const step4 = document.getElementById("modalStep4");
     if (step4) {
@@ -1338,6 +1435,7 @@ function mostrarResumoPedido() {
             if (pedidoAtual.tipo === "encomenda") {
                 const stepEncomenda = document.getElementById("modalStepEncomenda");
                 if (stepEncomenda) stepEncomenda.style.display = "block";
+                toggleCamposAgendamento();
             } else {
                 const step4 = document.getElementById("modalStep4");
                 if (step4) step4.style.display = "block";

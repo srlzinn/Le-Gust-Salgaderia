@@ -152,15 +152,6 @@
                 <p style="color: var(--text-light); margin-bottom:16px;">
                     Preencha os dados para fazer seu agendamento.
                 </p>
-                <!-- Tipo de entrega no agendamento -->
-                <div class="form-group" style="margin-bottom:16px;">
-                    <label for="encomendaTipoEntrega">Tipo de entrega *</label>
-                    <select id="encomendaTipoEntrega" required style="width:100%; padding:12px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:1rem;">
-                        <option value="">Selecione...</option>
-                        <option value="entrega">🛵 Entrega em casa</option>
-                        <option value="retirada">🏪 Retirada na loja</option>
-                    </select>
-                </div>
                 
                 <!-- Nome -->
                 <div class="form-group" style="margin-bottom:16px;">
@@ -212,24 +203,56 @@
                     </div>
                 </div>
 
-                <!-- Endereço completo -->
-                <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
-                    <h4 style="font-size:1rem; margin-bottom:12px;">📍 Local da encomenda</h4>
-                    <div class="form-group" style="margin-bottom:12px;">
-                        <label for="encomendaEndereco">Rua *</label>
-                        <input type="text" id="encomendaEndereco" placeholder="Digite o nome da rua" required />
+                <!-- TIPO DE AGENDAMENTO: ENTREGA ou RETIRADA -->
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block; margin-bottom:8px; font-weight:600;">Tipo de agendamento *</label>
+                    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:12px 20px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); background:white; transition:all 0.3s;">
+                            <input type="radio" name="tipoAgendamento" value="entrega" id="agendamentoEntrega" />
+                            <span>🛵 Entrega</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; padding:12px 20px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); background:white; transition:all 0.3s;">
+                            <input type="radio" name="tipoAgendamento" value="retirada" id="agendamentoRetirada" />
+                            <span>🏪 Retirada</span>
+                        </label>
                     </div>
-                    <div class="form-group" style="margin-bottom:12px;">
-                        <label for="encomendaNumero">Número *</label>
-                        <input type="text" id="encomendaNumero" placeholder="Número da casa" required />
+                    <p id="tipoAgendamentoError" style="color:#dc3545; font-size:0.85rem; margin-top:6px; display:none;">Selecione se deseja Entrega ou Retirada.</p>
+                </div>
+
+                <!-- CAMPOS CONDICIONAIS: Endereço para ENTREGA -->
+                <div id="camposEntrega" style="display:none;">
+                    <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+                        <h4 style="font-size:1rem; margin-bottom:12px;">📍 Endereço de entrega</h4>
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label for="encomendaEndereco">Rua *</label>
+                            <input type="text" id="encomendaEndereco" placeholder="Digite o nome da rua" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label for="encomendaNumero">Número *</label>
+                            <input type="text" id="encomendaNumero" placeholder="Número da casa" />
+                        </div>
+                        <div class="form-group" style="margin-bottom:12px;">
+                            <label for="encomendaBairro">Bairro *</label>
+                            <input type="text" id="encomendaBairro" placeholder="Digite o nome do seu bairro" style="border-color:var(--primary); border-width:2px;" />
+                        </div>
+                        <div class="form-group">
+                            <label for="encomendaReferencia">Ponto de referência</label>
+                            <input type="text" id="encomendaReferencia" placeholder="Próximo a..." />
+                        </div>
                     </div>
-                    <div class="form-group" style="margin-bottom:12px;">
-                        <label for="encomendaBairro">Bairro *</label>
-                        <input type="text" id="encomendaBairro" placeholder="Digite o nome do seu bairro" required style="border-color:var(--primary); border-width:2px;" />
-                    </div>
-                    <div class="form-group">
-                        <label for="encomendaReferencia">Ponto de referência</label>
-                        <input type="text" id="encomendaReferencia" placeholder="Próximo a..." />
+                    <p id="enderecoError" style="color:#dc3545; font-size:0.85rem; margin-top:-10px; margin-bottom:12px; display:none;">Por favor, preencha todos os campos de endereço.</p>
+                </div>
+
+                <!-- CAMPOS CONDICIONAIS: Retirada na loja -->
+                <div id="camposRetirada" style="display:none;">
+                    <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+                        <h4 style="font-size:1rem; margin-bottom:8px;">🏪 Retirada na loja</h4>
+                        <p style="color:var(--text-light); margin-bottom:4px;">
+                            <strong>Endereço da loja:</strong> ${CONFIG_ENV.endereco}
+                        </p>
+                        <p style="color:var(--text-light); font-size:0.9rem;">
+                            ⏱️ Retire seu pedido na data e horário agendados.
+                        </p>
                     </div>
                 </div>
 
