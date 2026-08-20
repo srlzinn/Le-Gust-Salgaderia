@@ -167,11 +167,11 @@
 
                 <!-- Horário -->
                 <div class="form-group" style="margin-bottom:16px;">
-                    <label>Horário *</label>
+                    <label>Horário * (selecione apenas um)</label>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px;">
                         <div>
                             <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌅 Manhã</strong>
-                            <select id="encomendaHorario" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem;">
+                            <select id="encomendaHorario" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
                                 <option value="">Selecione</option>
                                 <option value="08:00">08:00</option>
                                 <option value="08:30">08:30</option>
@@ -186,7 +186,7 @@
                         </div>
                         <div>
                             <strong style="display:block; font-size:0.85rem; color:var(--text-light); margin-bottom:6px;">🌆 Tarde</strong>
-                            <select id="encomendaHorarioTarde" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem;">
+                            <select id="encomendaHorarioTarde" class="horario-select" style="width:100%; padding:10px; border:2px solid var(--gray-dark); border-radius:var(--radius-sm); font-size:0.95rem; background:white; cursor:pointer;">
                                 <option value="">Selecione</option>
                                 <option value="14:30">14:30</option>
                                 <option value="15:00">15:00</option>
@@ -201,6 +201,7 @@
                             </select>
                         </div>
                     </div>
+                    <p style="font-size:0.8rem; color:#856404; margin-top:6px;">⚠️ Selecione apenas um horário (Manhã ou Tarde)</p>
                 </div>
 
                 <!-- TIPO DE AGENDAMENTO: ENTREGA ou RETIRADA -->
@@ -248,7 +249,7 @@
                     <div style="background:var(--cream); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
                         <h4 style="font-size:1rem; margin-bottom:8px;">🏪 Retirada na loja</h4>
                         <p style="color:var(--text-light); margin-bottom:4px;">
-                            <strong>Endereço da loja:</strong> ${CONFIG_ENV.endereco}
+                            <strong>Endereço da loja:</strong> R. São Benedito, 475 - Planalto, Parnaíba - PI
                         </p>
                         <p style="color:var(--text-light); font-size:0.9rem;">
                             ⏱️ Retire seu pedido na data e horário agendados.

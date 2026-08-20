@@ -145,7 +145,7 @@ const produtos = [
     },
 
     // ========================================================
-    // CONGELADOS (mantidos os já existentes)
+    // CONGELADOS
     // ========================================================
 
     {
@@ -500,6 +500,63 @@ function toggleCamposAgendamento() {
 
 
 // ============================================================
+// FUNÇÃO PARA LIMPAR O OUTRO CAMPO DE HORÁRIO
+// ============================================================
+
+function limparHorario(opcao) {
+    const selectManha = document.getElementById("encomendaHorario");
+    const selectTarde = document.getElementById("encomendaHorarioTarde");
+    
+    if (opcao === 'manha') {
+        if (selectTarde) {
+            selectTarde.value = "";
+            selectTarde.style.borderColor = "";
+        }
+        if (selectManha) selectManha.style.borderColor = "#28a745";
+    } else if (opcao === 'tarde') {
+        if (selectManha) {
+            selectManha.value = "";
+            selectManha.style.borderColor = "";
+        }
+        if (selectTarde) selectTarde.style.borderColor = "#28a745";
+    }
+}
+
+
+// ============================================================
+// HANDLER PARA MUDANÇA DE HORÁRIO
+// ============================================================
+
+function handleHorarioChange(e) {
+    const select = e.target;
+    const selectId = select.id;
+    const valor = select.value;
+    
+    // Se selecionou um valor, limpa o outro select
+    if (valor) {
+        if (selectId === "encomendaHorario") {
+            const selectTarde = document.getElementById("encomendaHorarioTarde");
+            if (selectTarde) {
+                selectTarde.value = "";
+                selectTarde.style.borderColor = "";
+            }
+            select.style.borderColor = "#28a745";
+        } else if (selectId === "encomendaHorarioTarde") {
+            const selectManha = document.getElementById("encomendaHorario");
+            if (selectManha) {
+                selectManha.value = "";
+                selectManha.style.borderColor = "";
+            }
+            select.style.borderColor = "#28a745";
+        }
+    } else {
+        // Se desmarcou, remove a borda verde
+        select.style.borderColor = "";
+    }
+}
+
+
+// ============================================================
 // INICIALIZAÇÃO
 // ============================================================
 
@@ -512,6 +569,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initModal();
     initAjuda();
     initAgendamentoRadios();
+    initHorarioSelects();
     atualizarCarrinhoUI();
     console.log("✅ Delivery inicializado!");
 });
@@ -527,6 +585,32 @@ function initAgendamentoRadios() {
             toggleCamposAgendamento();
         });
     });
+}
+
+
+// ============================================================
+// INICIALIZAÇÃO DOS SELECTS DE HORÁRIO
+// ============================================================
+
+function initHorarioSelects() {
+    const selectManha = document.getElementById("encomendaHorario");
+    const selectTarde = document.getElementById("encomendaHorarioTarde");
+    
+    if (selectManha) {
+        selectManha.removeEventListener("change", handleHorarioChange);
+        selectManha.addEventListener("change", handleHorarioChange);
+        selectManha.disabled = false;
+        selectManha.style.pointerEvents = "auto";
+        selectManha.style.opacity = "1";
+    }
+    
+    if (selectTarde) {
+        selectTarde.removeEventListener("change", handleHorarioChange);
+        selectTarde.addEventListener("change", handleHorarioChange);
+        selectTarde.disabled = false;
+        selectTarde.style.pointerEvents = "auto";
+        selectTarde.style.opacity = "1";
+    }
 }
 
 
@@ -907,7 +991,6 @@ function initModal() {
                 if (stepEncomenda) {
                     console.log("📅 Mostrando formulário de agendamento");
                     stepEncomenda.style.display = "block";
-                    // Garante que os campos condicionais estejam no estado inicial
                     toggleCamposAgendamento();
                 } else {
                     console.error("❌ modalStepEncomenda não encontrado!");
@@ -1079,7 +1162,49 @@ function confirmarEncomenda() {
     const data = document.getElementById("encomendaData")?.value;
     const horarioManha = document.getElementById("encomendaHorario")?.value;
     const horarioTarde = document.getElementById("encomendaHorarioTarde")?.value;
-    const horario = horarioManha || horarioTarde;
+    
+    console.log("🔍 Horário Manhã:", horarioManha);
+    console.log("🔍 Horário Tarde:", horarioTarde);
+    
+    // ========================================================
+    // VALIDAÇÃO: APENAS UM HORÁRIO PODE SER SELECIONADO
+    // ========================================================
+    
+    let horario = "";
+    let erroHorario = false;
+    
+    // Verifica se ambos foram selecionados
+    if (horarioManha && horarioTarde) {
+        alert("⚠️ Por favor, selecione APENAS um horário (Manhã OU Tarde).");
+        erroHorario = true;
+    } 
+    // Verifica se nenhum foi selecionado
+    else if (!horarioManha && !horarioTarde) {
+        alert("⚠️ Por favor, selecione um horário (Manhã ou Tarde).");
+        erroHorario = true;
+    } 
+    // Apenas um foi selecionado - ok!
+    else {
+        horario = horarioManha || horarioTarde;
+        console.log("✅ Horário selecionado:", horario);
+    }
+    
+    if (erroHorario) {
+        // Destaca os campos para o usuário
+        const selectManha = document.getElementById("encomendaHorario");
+        const selectTarde = document.getElementById("encomendaHorarioTarde");
+        if (selectManha && !horarioManha) selectManha.style.borderColor = "#dc3545";
+        if (selectTarde && !horarioTarde) selectTarde.style.borderColor = "#dc3545";
+        if (selectManha && horarioManha && horarioTarde) selectManha.style.borderColor = "#dc3545";
+        if (selectTarde && horarioManha && horarioTarde) selectTarde.style.borderColor = "#dc3545";
+        return;
+    }
+    
+    // Reseta a borda dos selects
+    const selectManha = document.getElementById("encomendaHorario");
+    const selectTarde = document.getElementById("encomendaHorarioTarde");
+    if (selectManha) selectManha.style.borderColor = "";
+    if (selectTarde) selectTarde.style.borderColor = "";
     
     // Captura o tipo de agendamento (radio button)
     const tipoEntregaRadio = document.querySelector('input[name="tipoAgendamento"]:checked');
@@ -1105,13 +1230,7 @@ function confirmarEncomenda() {
         return;
     }
 
-    // 3. Valida horário
-    if (!horario) {
-        alert("Por favor, selecione o horário do agendamento.");
-        return;
-    }
-
-    // 4. Valida tipo de agendamento (entrega ou retirada)
+    // 3. Valida tipo de agendamento (entrega ou retirada)
     if (!tipoAgendamento) {
         document.getElementById("tipoAgendamentoError").style.display = "block";
         alert("Por favor, selecione se deseja Entrega ou Retirada.");
