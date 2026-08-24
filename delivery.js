@@ -483,6 +483,13 @@ document.addEventListener("DOMContentLoaded", function () {
 function initHorarioSelects() {
     const selectManha = document.getElementById("agendamentoHorario");
     const selectTarde = document.getElementById("agendamentoHorarioTarde");
+    const dateInput = document.getElementById("agendamentoData");
+    
+    // Validação de domingo no input de data
+    if (dateInput) {
+        dateInput.removeEventListener("change", handleDateChange);
+        dateInput.addEventListener("change", handleDateChange);
+    }
     
     if (selectManha) {
         selectManha.removeEventListener("change", handleHorarioChange);
@@ -501,6 +508,31 @@ function initHorarioSelects() {
     }
 }
 
+// ============================================================
+// HANDLER PARA MUDANÇA DE DATA
+// ============================================================
+
+function handleDateChange(e) {
+    const input = e.target;
+    const dataSelecionada = new Date(input.value + 'T00:00:00');
+    const diaSemana = dataSelecionada.getDay();
+    
+    if (diaSemana === 0) {
+        alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
+        input.value = "";
+        // Limpa também os horários selecionados
+        const selectManha = document.getElementById("agendamentoHorario");
+        const selectTarde = document.getElementById("agendamentoHorarioTarde");
+        if (selectManha) {
+            selectManha.value = "";
+            selectManha.style.borderColor = "";
+        }
+        if (selectTarde) {
+            selectTarde.value = "";
+            selectTarde.style.borderColor = "";
+        }
+    }
+}
 
 // ============================================================
 // HANDLER PARA MUDANÇA DE HORÁRIO
@@ -876,13 +908,12 @@ function initModal() {
                     document.getElementById("modalStepAgendamento").style.display = "block";
                     // Mostra a info de retirada
                     document.getElementById("agendamentoRetiradaInfo").style.display = "block";
-                    // Define data mínima
+                    // Define data mínima - PERMITE HOJE
                     const dateInput = document.getElementById("agendamentoData");
                     if (dateInput) {
                         const today = new Date();
-                        const tomorrow = new Date(today);
-                        tomorrow.setDate(tomorrow.getDate() + 1);
-                        dateInput.min = tomorrow.toISOString().split('T')[0];
+                        const todayStr = today.toISOString().split('T')[0];
+                        dateInput.min = todayStr;
                     }
                 } else {
                     // Para agora - vai direto para o nome
@@ -985,13 +1016,12 @@ function confirmarEndereco() {
     ocultarTodosStepsModal();
     if (pedidoAtual.quando === "agendado") {
         document.getElementById("modalStepAgendamento").style.display = "block";
-        // Define data mínima
+        // Define data mínima - PERMITE HOJE
         const dateInput = document.getElementById("agendamentoData");
         if (dateInput) {
             const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            dateInput.min = tomorrow.toISOString().split('T')[0];
+            const todayStr = today.toISOString().split('T')[0];
+            dateInput.min = todayStr;
         }
     } else {
         document.getElementById("modalStepNome").style.display = "block";
@@ -1041,6 +1071,33 @@ function confirmarAgendamento() {
     if (!data) {
         alert("⚠️ Por favor, selecione a data do agendamento.");
         return;
+    }
+
+    // VALIDAÇÃO: BLOQUEAR DOMINGOS
+    const dataObj = new Date(data + 'T' + horario);
+    const diaSemana = dataObj.getDay(); // 0 = domingo
+    
+    if (diaSemana === 0) {
+        alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
+        return;
+    }
+
+    // VALIDAÇÃO: HORÁRIOS PASSADOS (apenas para hoje)
+    const hoje = new Date();
+    const dataSelecionada = new Date(data + 'T' + horario);
+    const agora = new Date();
+    
+    // Se for hoje, verifica se o horário já passou
+    if (dataSelecionada.toDateString() === hoje.toDateString()) {
+        const horaSelecionada = dataSelecionada.getHours();
+        const minutoSelecionado = dataSelecionada.getMinutes();
+        const horaAtual = agora.getHours();
+        const minutoAtual = agora.getMinutes();
+        
+        if (horaSelecionada < horaAtual || (horaSelecionada === horaAtual && minutoSelecionado < minutoAtual)) {
+            alert("⚠️ Este horário já passou. Por favor, selecione um horário futuro.");
+            return;
+        }
     }
     
     // Formata a data
