@@ -53,12 +53,12 @@
                 </button>
             </div>
 
-            <!-- ===== CATEGORIAS ===== -->
+            <!-- ===== CATEGORIAS (SEM "TODOS") ===== -->
             <div class="categorias">
                 <h2>Cardápio</h2>
                 <div class="categoria-tabs">
-                    <button type="button" class="categoria-tab active" data-categoria="todos">Todos</button>
-                    <button type="button" class="categoria-tab" data-categoria="salgados">Salgados</button>
+                    <!-- O botão "Todos" foi REMOVIDO - só as 3 categorias principais -->
+                    <button type="button" class="categoria-tab active" data-categoria="salgados">Salgados</button>
                     <button type="button" class="categoria-tab" data-categoria="congelados">Congelados</button>
                     <button type="button" class="categoria-tab" data-categoria="bebidas">Bebidas</button>
                 </div>
@@ -145,28 +145,7 @@
                 </p>
             </div>
 
-            <!-- STEP 2: Quando você precisa? -->
-            <div class="modal-step" id="modalStepQuando" style="display:none;">
-                <h3>⏰ Quando você precisa do seu pedido?</h3>
-                <p style="color: var(--text-light); margin-bottom:16px;">
-                    Selecione se deseja receber agora ou agendar para outro horário.
-                </p>
-                <div class="quando-options">
-                    <button type="button" class="quando-option" data-quando="agora">
-                        <span class="option-icon">⚡</span>
-                        PARA AGORA
-                        <small style="display:block; color:var(--text-light); font-size:0.8rem; margin-top:4px;">Entrega em 30-45 min</small>
-                    </button>
-                    <button type="button" class="quando-option" data-quando="agendado">
-                        <span class="option-icon">📅</span>
-                        AGENDAR PARA OUTRO HORÁRIO
-                        <small style="display:block; color:var(--text-light); font-size:0.8rem; margin-top:4px;">Escolha data e horário</small>
-                    </button>
-                </div>
-                <p id="quandoError" style="color:#dc3545; font-size:0.85rem; margin-top:12px; display:none; text-align:center;">Por favor, selecione uma opção.</p>
-            </div>
-
-            <!-- STEP 3: Endereço para entrega -->
+            <!-- STEP 2: Endereço para entrega -->
             <div class="modal-step" id="modalStepEndereco" style="display:none;">
                 <h3>📍 Endereço de entrega</h3>
                 <p style="color: var(--text-light); margin-bottom:16px;">
@@ -207,7 +186,7 @@
                 </form>
             </div>
 
-            <!-- STEP 4: Agendamento (data e horário) -->
+            <!-- STEP 3: Agendamento (data e horário) -->
             <div class="modal-step" id="modalStepAgendamento" style="display:none;">
                 <h3>📅 Agendar Pedido</h3>
                 <p style="color: var(--text-light); margin-bottom:16px;">

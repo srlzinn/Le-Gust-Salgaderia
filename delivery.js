@@ -16,28 +16,26 @@ const CONFIG_ENV = window.CONFIG || {
 // ============================================================
 
 const HORARIO_FUNCIONAMENTO = {
-    // Dias da semana: 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
     dias: {
-        0: { aberto: false },                    // Domingo - FECHADO
-        1: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Segunda
-        2: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Terça
-        3: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Quarta
-        4: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Quinta
-        5: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Sexta
-        6: { aberto: true, abertura: "08:00", fechamento: "18:00" }  // Sábado
+        0: { aberto: false },
+        1: { aberto: true, abertura: "08:00", fechamento: "18:00" },
+        2: { aberto: true, abertura: "08:00", fechamento: "18:00" },
+        3: { aberto: true, abertura: "08:00", fechamento: "18:00" },
+        4: { aberto: true, abertura: "08:00", fechamento: "18:00" },
+        5: { aberto: true, abertura: "08:00", fechamento: "18:00" },
+        6: { aberto: true, abertura: "08:00", fechamento: "18:00" }
     }
 };
 
 // ============================================================
-// FUNÇÃO PARA VERIFICAR SE A LOJA ESTÁ ABERTA
+// FUNÇÕES DE VERIFICAÇÃO DE HORÁRIO
 // ============================================================
 
 function verificarLojaAberta(dataHora = null) {
     const agora = dataHora ? new Date(dataHora) : new Date();
-    const diaSemana = agora.getDay(); // 0 = Domingo, 6 = Sábado
+    const diaSemana = agora.getDay();
     const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
     
-    // Se o dia está configurado como fechado
     if (!configDia || !configDia.aberto) {
         return {
             aberto: false,
@@ -47,16 +45,12 @@ function verificarLojaAberta(dataHora = null) {
         };
     }
     
-    // Pega horários de abertura e fechamento
     const horaAbertura = configDia.abertura;
     const horaFechamento = configDia.fechamento;
-    
-    // Converte para minutos para facilitar comparação
     const horaAtual = agora.getHours() * 60 + agora.getMinutes();
     const aberturaMin = converterHoraParaMinutos(horaAbertura);
     const fechamentoMin = converterHoraParaMinutos(horaFechamento);
     
-    // Verifica se está dentro do horário de funcionamento
     if (horaAtual >= aberturaMin && horaAtual <= fechamentoMin) {
         return {
             aberto: true,
@@ -84,16 +78,11 @@ function verificarLojaAberta(dataHora = null) {
     }
 }
 
-// ============================================================
-// FUNÇÃO PARA VERIFICAR SE UM HORÁRIO ESPECÍFICO ESTÁ DISPONÍVEL
-// ============================================================
-
 function verificarHorarioDisponivel(data, horario) {
     const dataHora = new Date(data + 'T' + horario);
     const diaSemana = dataHora.getDay();
     const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
     
-    // Verifica se o dia está aberto
     if (!configDia || !configDia.aberto) {
         return {
             disponivel: false,
@@ -101,7 +90,6 @@ function verificarHorarioDisponivel(data, horario) {
         };
     }
     
-    // Verifica se o horário está dentro do expediente
     const horaAbertura = configDia.abertura;
     const horaFechamento = configDia.fechamento;
     const horaSelecionada = dataHora.getHours() * 60 + dataHora.getMinutes();
@@ -122,20 +110,14 @@ function verificarHorarioDisponivel(data, horario) {
 }
 
 // ============================================================
-// FUNÇÃO PARA ATUALIZAR O STATUS DA LOJA NO HEADER
+// FUNÇÃO PARA ATUALIZAR O STATUS DA LOJA
 // ============================================================
 
 function atualizarStatusLoja() {
-    console.log("🔄 Atualizando status da loja...");
-    
     const statusBadge = document.querySelector('.status-badge');
-    if (!statusBadge) {
-        console.warn("⚠️ Elemento .status-badge não encontrado");
-        return;
-    }
+    if (!statusBadge) return;
     
     const status = verificarLojaAberta();
-    console.log("📊 Status da loja:", status);
     
     if (status.aberto) {
         statusBadge.textContent = '🟢 Aberto agora';
@@ -156,8 +138,6 @@ function atualizarStatusLoja() {
         statusBadge.style.background = '#f8d7da';
         statusBadge.style.borderColor = '#f5c6cb';
     }
-    
-    console.log("✅ Status atualizado para:", statusBadge.textContent);
 }
 
 // ============================================================
@@ -174,14 +154,8 @@ function converterHoraParaMinutos(hora) {
     return parseInt(partes[0]) * 60 + parseInt(partes[1]);
 }
 
-function formatarHora(hora) {
-    const partes = hora.split(":");
-    return `${partes[0]}:${partes[1]}`;
-}
-
-
 // ============================================================
-// CARDÁPIO COM IMAGENS
+// CARDÁPIO COM IMAGENS (SOMENTE CATEGORIAS: salgados, congelados, bebidas)
 // ============================================================
 
 const produtos = [
@@ -349,10 +323,6 @@ const produtos = [
         imagem: "./pao-queijo-calabresa.jpeg",
         observacao: "Produto congelado. NÃO é assado. O cliente deve assar em casa. A Le' Gust não envia o pão de queijo assado."
     },
-
-    // ========================================================
-    // NOVOS PRODUTOS CONGELADOS (R$ 16,00 cada - 25 unidades)
-    // ========================================================
 
     {
         id: 21,
@@ -525,69 +495,31 @@ const produtos = [
     }
 ];
 
-
 // ============================================================
 // BAIRROS COM TAXA FIXA
 // ============================================================
 
 const BAIRROS_TAXA_FIXA = [
-    "planalto",
-    "raul bacelar",
-    "conselheiro alberto silva",
-    "casas carmem",
-    "reis veloso",
-    "frei higino",
-    "piauí",
-    "piaui",
-    "betânia",
-    "betania",
-    "floriopolis",
-    "floriópolis",
-    "joão xxiii",
-    "joao xxiii",
-    "pedro",
-    "colina do alvorada",
-    "catanduvas",
-    "são benedito",
-    "sao benedito",
-    "pindorama",
-    "rodoviária",
-    "rodoviaria",
-    "ceará",
-    "ceara",
-    "são francisco da guarita",
-    "sao francisco da guarita",
-    "sabiazal",
-    "dom rufino",
-    "joaz souza",
-    "primavera",
-    "broder ville",
-    "dunas",
-    "dirceu arcoverde",
-    "santa luzia",
-    "alto santa maria",
-    "bebedouro",
-    "são vicente de paula",
-    "sao vicente de paula",
-    "são josé",
-    "sao jose",
-    "centro",
-    "nossa senhora de fátima",
-    "nossa senhora de fatima",
-    "nossa senhora do carmo",
-    "campos",
-    "nova parnaíba",
-    "nova parnaiba",
+    "planalto", "raul bacelar", "conselheiro alberto silva", "casas carmem",
+    "reis veloso", "frei higino", "piauí", "piaui", "betânia", "betania",
+    "floriopolis", "floriópolis", "joão xxiii", "joao xxiii", "pedro",
+    "colina do alvorada", "catanduvas", "são benedito", "sao benedito",
+    "pindorama", "rodoviária", "rodoviaria", "ceará", "ceara",
+    "são francisco da guarita", "sao francisco da guarita", "sabiazal",
+    "dom rufino", "joaz souza", "primavera", "broder ville", "dunas",
+    "dirceu arcoverde", "santa luzia", "alto santa maria", "bebedouro",
+    "são vicente de paula", "sao vicente de paula", "são josé", "sao jose",
+    "centro", "nossa senhora de fátima", "nossa senhora de fatima",
+    "nossa senhora do carmo", "campos", "nova parnaíba", "nova parnaiba",
     "beira rio"
 ];
-
 
 // ============================================================
 // ESTADO
 // ============================================================
 
 let carrinho = [];
-let categoriaAtiva = "todos";
+let categoriaAtiva = "salgados"; // ALTERADO: padrão é "salgados" em vez de "todos"
 let pedidoAtual = {
     tipo: null,
     quando: null,
@@ -595,7 +527,6 @@ let pedidoAtual = {
     pagamento: null,
     agendamento: null
 };
-
 
 // ============================================================
 // FUNÇÃO PARA CALCULAR TAXA DE ENTREGA
@@ -624,7 +555,6 @@ function calcularTaxaEntrega(tipo, endereco) {
     return { taxa: 0, texto: "R$ 0,00", calculado: true };
 }
 
-
 // ============================================================
 // INICIALIZAÇÃO
 // ============================================================
@@ -632,11 +562,14 @@ function calcularTaxaEntrega(tipo, endereco) {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("🚀 Inicializando delivery...");
     
-    // Atualiza o status da loja primeiro
+    // REMOVER O FILTRO "TODOS" DO HTML
+    removerFiltroTodos();
+    
+    // Atualiza o status da loja
     atualizarStatusLoja();
     
-    // Inicializa os outros componentes
-    renderizarProdutos();
+    // Inicializa os componentes
+    renderizarProdutos("salgados"); // Começa com salgados
     initFiltroCategorias();
     initNavbar();
     initCarrinho();
@@ -651,6 +584,27 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log("✅ Delivery inicializado!");
 });
 
+// ============================================================
+// REMOVER FILTRO "TODOS"
+// ============================================================
+
+function removerFiltroTodos() {
+    // Remove o botão "Todos" do HTML
+    const tabsContainer = document.querySelector('.categoria-tabs');
+    if (tabsContainer) {
+        const todosBtn = tabsContainer.querySelector('.categoria-tab[data-categoria="todos"]');
+        if (todosBtn) {
+            todosBtn.remove();
+            console.log("🗑️ Filtro 'Todos' removido do HTML");
+        }
+        
+        // Se o primeiro botão não estiver ativo, ativa o primeiro
+        const firstBtn = tabsContainer.querySelector('.categoria-tab');
+        if (firstBtn && !firstBtn.classList.contains('active')) {
+            firstBtn.classList.add('active');
+        }
+    }
+}
 
 // ============================================================
 // INICIALIZAÇÃO DOS SELECTS DE HORÁRIO
@@ -693,7 +647,6 @@ function handleDateChange(e) {
     const diaSemana = dataSelecionada.getDay();
     const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
     
-    // Verifica se o dia está aberto
     if (!configDia || !configDia.aberto) {
         alert(`⚠️ A Le' Gust Salgaderia não funciona aos ${getNomeDia(diaSemana)}s. Por favor, selecione outro dia.`);
         input.value = "";
@@ -710,7 +663,6 @@ function handleDateChange(e) {
         return;
     }
     
-    // Se for hoje, verifica se já passou do horário de fechamento
     const hoje = new Date();
     if (dataSelecionada.toDateString() === hoje.toDateString()) {
         const horaAtual = hoje.getHours() * 60 + hoje.getMinutes();
@@ -764,21 +716,19 @@ function handleHorarioChange(e) {
     }
 }
 
-
 // ============================================================
-// PRODUTOS - RENDERIZAÇÃO COM IMAGENS
+// PRODUTOS - RENDERIZAÇÃO COM IMAGENS (SEM "TODOS")
 // ============================================================
 
-function renderizarProdutos(categoria = "todos") {
+function renderizarProdutos(categoria = "salgados") {
     const lista = document.getElementById("produtosLista");
     if (!lista) {
         console.error("❌ #produtosLista não encontrado!");
         return;
     }
 
-    const produtosFiltrados = categoria === "todos"
-        ? produtos
-        : produtos.filter(produto => produto.categoria === categoria);
+    // FILTRA APENAS PELA CATEGORIA ESPECÍFICA (SEM "TODOS")
+    const produtosFiltrados = produtos.filter(produto => produto.categoria === categoria);
 
     if (produtosFiltrados.length === 0) {
         lista.innerHTML = `
@@ -852,9 +802,8 @@ function renderizarProdutos(categoria = "todos") {
     });
 }
 
-
 // ============================================================
-// CATEGORIAS
+// CATEGORIAS (SEM "TODOS")
 // ============================================================
 
 function initFiltroCategorias() {
@@ -862,12 +811,12 @@ function initFiltroCategorias() {
         tab.addEventListener("click", function () {
             document.querySelectorAll(".categoria-tab").forEach(t => t.classList.remove("active"));
             this.classList.add("active");
-            categoriaAtiva = this.dataset.categoria;
-            renderizarProdutos(categoriaAtiva);
+            const categoria = this.dataset.categoria;
+            categoriaAtiva = categoria;
+            renderizarProdutos(categoria);
         });
     });
 }
-
 
 // ============================================================
 // CARRINHO
@@ -910,7 +859,6 @@ function limparCarrinho() {
     carrinho = [];
     atualizarCarrinhoUI();
 }
-
 
 // ============================================================
 // INTERFACE DO CARRINHO
@@ -968,7 +916,6 @@ function atualizarCarrinhoUI() {
     }
 }
 
-
 // ============================================================
 // CARRINHO - ABRIR / FECHAR
 // ============================================================
@@ -987,7 +934,6 @@ function toggleCarrinho() {
     const cart = document.getElementById("cartSidebar");
     if (cart) cart.classList.toggle("open");
 }
-
 
 // ============================================================
 // INICIALIZAÇÃO DO CARRINHO
@@ -1011,7 +957,6 @@ function initCarrinho() {
         }
     });
 }
-
 
 // ============================================================
 // MODAL
@@ -1043,16 +988,15 @@ function fecharModal() {
 }
 
 function ocultarTodosStepsModal() {
-    const ids = ["modalStep1", "modalStepQuando", "modalStepEndereco", "modalStepAgendamento", "modalStepNome", "modalStepPagamento", "modalStepResumo"];
+    const ids = ["modalStep1", "modalStepEndereco", "modalStepAgendamento", "modalStepNome", "modalStepPagamento", "modalStepResumo"];
     ids.forEach(id => {
         const element = document.getElementById(id);
         if (element) element.style.display = "none";
     });
 }
 
-
 // ============================================================
-// INICIALIZAÇÃO DO MODAL
+// INICIALIZAÇÃO DO MODAL (SEM "AGORA")
 // ============================================================
 
 function initModal() {
@@ -1078,63 +1022,26 @@ function initModal() {
             console.log("📦 Forma de recebimento selecionada:", tipo);
             pedidoAtual.tipo = tipo;
             
-            ocultarTodosStepsModal();
-            document.getElementById("modalStepQuando").style.display = "block";
-        });
-    });
-
-    // ========================================================
-    // STEP 2: Quando você precisa?
-    // ========================================================
-
-    document.querySelectorAll(".quando-option").forEach(btn => {
-        btn.addEventListener("click", function () {
-            const quando = this.dataset.quando;
-            console.log("⏰ Quando selecionado:", quando);
-            
-            // ✅ VERIFICA SE A LOJA ESTÁ ABERTA PARA PEDIDO AGORA
-            if (quando === "agora") {
-                const statusLoja = verificarLojaAberta();
-                
-                if (!statusLoja.aberto) {
-                    let mensagem = `⚠️ ${statusLoja.motivo}`;
-                    
-                    // Se estiver fechado mas tiver horário de funcionamento, mostra o horário
-                    if (statusLoja.horario) {
-                        mensagem += `\n\nHorário de funcionamento: ${statusLoja.horario.abertura} às ${statusLoja.horario.fechamento}`;
-                    }
-                    
-                    alert(mensagem);
-                    return;
-                }
-            }
-            
-            pedidoAtual.quando = quando;
-            document.getElementById("quandoError").style.display = "none";
-            
+            // VAI DIRETO PARA O AGENDAMENTO (SEM STEP "QUANDO")
             ocultarTodosStepsModal();
             
-            if (pedidoAtual.tipo === "entrega") {
+            if (tipo === "entrega") {
                 document.getElementById("modalStepEndereco").style.display = "block";
-            } else if (pedidoAtual.tipo === "retirada") {
-                if (quando === "agendado") {
-                    document.getElementById("modalStepAgendamento").style.display = "block";
-                    document.getElementById("agendamentoRetiradaInfo").style.display = "block";
-                    const dateInput = document.getElementById("agendamentoData");
-                    if (dateInput) {
-                        const today = new Date();
-                        const todayStr = today.toISOString().split('T')[0];
-                        dateInput.min = todayStr;
-                    }
-                } else {
-                    document.getElementById("modalStepNome").style.display = "block";
+            } else if (tipo === "retirada") {
+                document.getElementById("modalStepAgendamento").style.display = "block";
+                document.getElementById("agendamentoRetiradaInfo").style.display = "block";
+                const dateInput = document.getElementById("agendamentoData");
+                if (dateInput) {
+                    const today = new Date();
+                    const todayStr = today.toISOString().split('T')[0];
+                    dateInput.min = todayStr;
                 }
             }
         });
     });
 
     // ========================================================
-    // STEP 3: Endereço (Entrega)
+    // STEP 2: Endereço (Entrega)
     // ========================================================
 
     const btnEndereco = document.getElementById("modalEnderecoConfirmar");
@@ -1143,7 +1050,7 @@ function initModal() {
     }
 
     // ========================================================
-    // STEP 4: Agendamento (Data e Horário)
+    // STEP 3: Agendamento (Data e Horário)
     // ========================================================
 
     const btnAgendamento = document.getElementById("btnConfirmarAgendamento");
@@ -1191,7 +1098,6 @@ function initModal() {
     });
 }
 
-
 // ============================================================
 // CONFIRMAR ENDEREÇO (Entrega)
 // ============================================================
@@ -1221,19 +1127,14 @@ function confirmarEndereco() {
     pedidoAtual.endereco.taxaCalculada = resultadoTaxa.calculado;
 
     ocultarTodosStepsModal();
-    if (pedidoAtual.quando === "agendado") {
-        document.getElementById("modalStepAgendamento").style.display = "block";
-        const dateInput = document.getElementById("agendamentoData");
-        if (dateInput) {
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-            dateInput.min = todayStr;
-        }
-    } else {
-        document.getElementById("modalStepNome").style.display = "block";
+    document.getElementById("modalStepAgendamento").style.display = "block";
+    const dateInput = document.getElementById("agendamentoData");
+    if (dateInput) {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        dateInput.min = todayStr;
     }
 }
-
 
 // ============================================================
 // CONFIRMAR AGENDAMENTO
@@ -1277,7 +1178,7 @@ function confirmarAgendamento() {
         return;
     }
 
-    // ✅ VERIFICA SE O DIA ESTÁ ABERTO
+    // Verifica se o dia está aberto
     const dataObj = new Date(data + 'T' + horario);
     const diaSemana = dataObj.getDay();
     const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
@@ -1287,14 +1188,14 @@ function confirmarAgendamento() {
         return;
     }
 
-    // ✅ VERIFICA SE O HORÁRIO ESTÁ DENTRO DO EXPEDIENTE
+    // Verifica se o horário está dentro do expediente
     const resultadoHorario = verificarHorarioDisponivel(data, horario);
     if (!resultadoHorario.disponivel) {
         alert(`⚠️ ${resultadoHorario.motivo}`);
         return;
     }
 
-    // ✅ VERIFICA SE O HORÁRIO JÁ PASSOU (apenas para hoje)
+    // Verifica se o horário já passou (apenas para hoje)
     const hoje = new Date();
     const dataSelecionada = new Date(data + 'T' + horario);
     const agora = new Date();
@@ -1319,6 +1220,8 @@ function confirmarAgendamento() {
         minute: '2-digit'
     });
     
+    // Define o pedido como agendado
+    pedidoAtual.quando = "agendado";
     pedidoAtual.agendamento = {
         data: data,
         horario: horario,
@@ -1330,7 +1233,6 @@ function confirmarAgendamento() {
     ocultarTodosStepsModal();
     document.getElementById("modalStepNome").style.display = "block";
 }
-
 
 // ============================================================
 // BOTÃO FINALIZAR PEDIDO
@@ -1371,7 +1273,6 @@ function criarBotaoFinalizar() {
     }
 }
 
-
 // ============================================================
 // RESUMO DO PEDIDO
 // ============================================================
@@ -1399,7 +1300,6 @@ function mostrarResumoPedido() {
     let textoTaxa = "R$ 0,00";
     let taxaCalculada = true;
     let tipoEntregaTexto = "";
-    let quandoTexto = "";
 
     if (pedidoAtual.tipo === "entrega") {
         tipoEntregaTexto = "🛵 Entrega em casa";
@@ -1415,12 +1315,7 @@ function mostrarResumoPedido() {
         taxaCalculada = true;
     }
 
-    if (pedidoAtual.quando === "agora") {
-        quandoTexto = "⚡ AGORA";
-    } else if (pedidoAtual.quando === "agendado") {
-        quandoTexto = `📅 ${pedidoAtual.agendamento?.dataFormatada || "Agendado"}`;
-    }
-
+    const quandoTexto = `📅 ${pedidoAtual.agendamento?.dataFormatada || "Agendado"}`;
     const total = subtotal + taxa;
 
     let step = document.getElementById("modalStepResumo");
@@ -1436,18 +1331,16 @@ function mostrarResumoPedido() {
         modalContent.appendChild(step);
     }
 
-    const isAgendado = pedidoAtual.quando === "agendado";
-
     step.innerHTML = `
         <h3>📋 Finalizar Pedido</h3>
         <p style="color:var(--text-light); margin-bottom:18px;">Confira os dados do seu pedido antes de enviar.</p>
 
-        <div style="margin-bottom:15px; padding:15px; border-radius:8px; text-align:center; ${isAgendado ? 'background:#fff3cd; border:2px solid #ffc107;' : 'background:#d4edda; border:2px solid #28a745;'}">
-            <strong style="font-size:1.1rem; ${isAgendado ? 'color:#856404;' : 'color:#155724;'}">
-                ${isAgendado ? '📅 PEDIDO AGENDADO' : '⚡ PEDIDO IMEDIATO'}
+        <div style="margin-bottom:15px; padding:15px; border-radius:8px; text-align:center; background:#fff3cd; border:2px solid #ffc107;">
+            <strong style="font-size:1.1rem; color:#856404;">
+                📅 PEDIDO AGENDADO
             </strong>
-            <p style="margin:5px 0 0; ${isAgendado ? 'color:#856404;' : 'color:#155724;'}">
-                ${isAgendado ? `Entrega: ${pedidoAtual.agendamento?.dataFormatada || ''}` : 'Entrega: AGORA'}
+            <p style="margin:5px 0 0; color:#856404;">
+                Entrega: ${pedidoAtual.agendamento?.dataFormatada || ''}
             </p>
         </div>
 
@@ -1462,7 +1355,7 @@ function mostrarResumoPedido() {
         </div>
 
         <div style="margin-bottom:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
-            <strong>⏰ Quando</strong>
+            <strong>⏰ Agendamento</strong>
             <p style="margin:5px 0 0;">${quandoTexto}</p>
         </div>
 
@@ -1549,7 +1442,6 @@ function mostrarResumoPedido() {
     }
 }
 
-
 // ============================================================
 // ENVIAR PEDIDO PARA WHATSAPP
 // ============================================================
@@ -1572,14 +1464,10 @@ function confirmarEEnviarPedido() {
         return;
     }
 
-    const isAgendado = pedidoAtual.quando === "agendado";
-    const statusTexto = isAgendado ? "AGENDADO" : "IMEDIATO";
-    const quandoTexto = isAgendado 
-        ? `📅 ${pedidoAtual.agendamento?.dataFormatada || "Agendado"}`
-        : "⚡ AGORA";
+    const quandoTexto = `📅 ${pedidoAtual.agendamento?.dataFormatada || "Agendado"}`;
 
     let message = " *NOVO PEDIDO - LE GUST SALGADERIA*\n\n";
-    message += ` *STATUS:* ${statusTexto}\n`;
+    message += ` *STATUS:* AGENDADO\n`;
     message += ` *QUANDO:* ${quandoTexto}\n\n`;
     message += ` *CLIENTE:* ${pedidoAtual.nome}\n\n`;
     message += " *ITENS DO PEDIDO:*\n";
@@ -1642,7 +1530,6 @@ function confirmarEEnviarPedido() {
     mostrarToast("Pedido enviado para o WhatsApp!");
 }
 
-
 // ============================================================
 // AJUDA
 // ============================================================
@@ -1654,7 +1541,6 @@ function initAjuda() {
         openWhatsApp("Olá! Vim pelo site da Le Gust Salgaderia e preciso de ajuda com meu pedido.");
     });
 }
-
 
 // ============================================================
 // NAVBAR
@@ -1674,7 +1560,6 @@ function initNavbar() {
     });
 }
 
-
 // ============================================================
 // WHATSAPP
 // ============================================================
@@ -1684,7 +1569,6 @@ function openWhatsApp(message) {
     const url = `https://wa.me/${numero}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
 }
-
 
 // ============================================================
 // TOAST
