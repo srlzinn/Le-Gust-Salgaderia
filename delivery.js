@@ -11,13 +11,141 @@ const CONFIG_ENV = window.CONFIG || {
     endereco: "R. São Benedito, 475 - Planalto, Parnaíba - PI"
 };
 
+// ============================================================
+// CONFIGURAÇÃO DE HORÁRIO DE FUNCIONAMENTO
+// ============================================================
+
+const HORARIO_FUNCIONAMENTO = {
+    // Dias da semana: 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+    dias: {
+        0: { aberto: false },                    // Domingo - FECHADO
+        1: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Segunda
+        2: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Terça
+        3: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Quarta
+        4: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Quinta
+        5: { aberto: true, abertura: "08:00", fechamento: "18:00" }, // Sexta
+        6: { aberto: true, abertura: "08:00", fechamento: "18:00" }  // Sábado
+    }
+};
+
+// ============================================================
+// FUNÇÃO PARA VERIFICAR SE A LOJA ESTÁ ABERTA
+// ============================================================
+
+function verificarLojaAberta(dataHora = null) {
+    const agora = dataHora ? new Date(dataHora) : new Date();
+    const diaSemana = agora.getDay(); // 0 = Domingo, 6 = Sábado
+    const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
+    
+    // Se o dia está configurado como fechado
+    if (!configDia || !configDia.aberto) {
+        return {
+            aberto: false,
+            motivo: `A loja não funciona aos ${getNomeDia(diaSemana)}s.`,
+            dia: diaSemana,
+            horario: null
+        };
+    }
+    
+    // Pega horários de abertura e fechamento
+    const horaAbertura = configDia.abertura;
+    const horaFechamento = configDia.fechamento;
+    
+    // Converte para minutos para facilitar comparação
+    const horaAtual = agora.getHours() * 60 + agora.getMinutes();
+    const aberturaMin = converterHoraParaMinutos(horaAbertura);
+    const fechamentoMin = converterHoraParaMinutos(horaFechamento);
+    
+    // Verifica se está dentro do horário de funcionamento
+    if (horaAtual >= aberturaMin && horaAtual <= fechamentoMin) {
+        return {
+            aberto: true,
+            motivo: "Loja aberta",
+            dia: diaSemana,
+            horario: {
+                abertura: horaAbertura,
+                fechamento: horaFechamento,
+                aberturaMin: aberturaMin,
+                fechamentoMin: fechamentoMin
+            }
+        };
+    } else {
+        return {
+            aberto: false,
+            motivo: `A loja funciona das ${horaAbertura} às ${horaFechamento} ${getNomeDia(diaSemana)}.`,
+            dia: diaSemana,
+            horario: {
+                abertura: horaAbertura,
+                fechamento: horaFechamento,
+                aberturaMin: aberturaMin,
+                fechamentoMin: fechamentoMin
+            }
+        };
+    }
+}
+
+// ============================================================
+// FUNÇÃO PARA VERIFICAR SE UM HORÁRIO ESPECÍFICO ESTÁ DISPONÍVEL
+// ============================================================
+
+function verificarHorarioDisponivel(data, horario) {
+    const dataHora = new Date(data + 'T' + horario);
+    const diaSemana = dataHora.getDay();
+    const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
+    
+    // Verifica se o dia está aberto
+    if (!configDia || !configDia.aberto) {
+        return {
+            disponivel: false,
+            motivo: `A loja não funciona aos ${getNomeDia(diaSemana)}s.`
+        };
+    }
+    
+    // Verifica se o horário está dentro do expediente
+    const horaAbertura = configDia.abertura;
+    const horaFechamento = configDia.fechamento;
+    const horaSelecionada = dataHora.getHours() * 60 + dataHora.getMinutes();
+    const aberturaMin = converterHoraParaMinutos(horaAbertura);
+    const fechamentoMin = converterHoraParaMinutos(horaFechamento);
+    
+    if (horaSelecionada >= aberturaMin && horaSelecionada <= fechamentoMin) {
+        return {
+            disponivel: true,
+            motivo: "Horário disponível"
+        };
+    } else {
+        return {
+            disponivel: false,
+            motivo: `Horário fora do expediente. A loja funciona das ${horaAbertura} às ${horaFechamento}.`
+        };
+    }
+}
+
+// ============================================================
+// FUNÇÕES AUXILIARES
+// ============================================================
+
+function getNomeDia(dia) {
+    const dias = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+    return dias[dia] || "Dia inválido";
+}
+
+function converterHoraParaMinutos(hora) {
+    const partes = hora.split(":");
+    return parseInt(partes[0]) * 60 + parseInt(partes[1]);
+}
+
+function formatarHora(hora) {
+    const partes = hora.split(":");
+    return `${partes[0]}:${partes[1]}`;
+}
+
 
 // ============================================================
 // CARDÁPIO COM IMAGENS
 // ============================================================
 
 const produtos = [
-
     // ========================================================
     // SALGADOS
     // ========================================================
@@ -515,9 +643,11 @@ function handleDateChange(e) {
     const input = e.target;
     const dataSelecionada = new Date(input.value + 'T00:00:00');
     const diaSemana = dataSelecionada.getDay();
+    const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
     
-    if (diaSemana === 0) {
-        alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
+    // Verifica se o dia está aberto
+    if (!configDia || !configDia.aberto) {
+        alert(`⚠️ A Le' Gust Salgaderia não funciona aos ${getNomeDia(diaSemana)}s. Por favor, selecione outro dia.`);
         input.value = "";
         const selectManha = document.getElementById("agendamentoHorario");
         const selectTarde = document.getElementById("agendamentoHorarioTarde");
@@ -528,6 +658,30 @@ function handleDateChange(e) {
         if (selectTarde) {
             selectTarde.value = "";
             selectTarde.style.borderColor = "";
+        }
+        return;
+    }
+    
+    // Se for hoje, verifica se já passou do horário de fechamento
+    const hoje = new Date();
+    if (dataSelecionada.toDateString() === hoje.toDateString()) {
+        const horaAtual = hoje.getHours() * 60 + hoje.getMinutes();
+        const fechamentoMin = converterHoraParaMinutos(configDia.fechamento);
+        
+        if (horaAtual > fechamentoMin) {
+            alert(`⚠️ A loja já fechou hoje (${configDia.fechamento}). Por favor, selecione outro dia.`);
+            input.value = "";
+            const selectManha = document.getElementById("agendamentoHorario");
+            const selectTarde = document.getElementById("agendamentoHorarioTarde");
+            if (selectManha) {
+                selectManha.value = "";
+                selectManha.style.borderColor = "";
+            }
+            if (selectTarde) {
+                selectTarde.value = "";
+                selectTarde.style.borderColor = "";
+            }
+            return;
         }
     }
 }
@@ -890,12 +1044,19 @@ function initModal() {
             const quando = this.dataset.quando;
             console.log("⏰ Quando selecionado:", quando);
             
-            // ✅ BLOQUEIO PARA PEDIDO AGORA EM DOMINGOS
+            // ✅ VERIFICA SE A LOJA ESTÁ ABERTA PARA PEDIDO AGORA
             if (quando === "agora") {
-                const hoje = new Date();
-                const diaSemana = hoje.getDay();
-                if (diaSemana === 0) {
-                    alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione a opção de agendamento para outro dia.");
+                const statusLoja = verificarLojaAberta();
+                
+                if (!statusLoja.aberto) {
+                    let mensagem = `⚠️ ${statusLoja.motivo}`;
+                    
+                    // Se estiver fechado mas tiver horário de funcionamento, mostra o horário
+                    if (statusLoja.horario) {
+                        mensagem += `\n\nHorário de funcionamento: ${statusLoja.horario.abertura} às ${statusLoja.horario.fechamento}`;
+                    }
+                    
+                    alert(mensagem);
                     return;
                 }
             }
@@ -1068,16 +1229,24 @@ function confirmarAgendamento() {
         return;
     }
 
-    // ✅ BLOQUEIO DE DOMINGO NO AGENDAMENTO
+    // ✅ VERIFICA SE O DIA ESTÁ ABERTO
     const dataObj = new Date(data + 'T' + horario);
     const diaSemana = dataObj.getDay();
+    const configDia = HORARIO_FUNCIONAMENTO.dias[diaSemana];
     
-    if (diaSemana === 0) {
-        alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
+    if (!configDia || !configDia.aberto) {
+        alert(`⚠️ A Le' Gust Salgaderia não funciona aos ${getNomeDia(diaSemana)}s. Por favor, selecione outro dia.`);
         return;
     }
 
-    // ✅ BLOQUEIO DE HORÁRIOS PASSADOS (apenas para hoje)
+    // ✅ VERIFICA SE O HORÁRIO ESTÁ DENTRO DO EXPEDIENTE
+    const resultadoHorario = verificarHorarioDisponivel(data, horario);
+    if (!resultadoHorario.disponivel) {
+        alert(`⚠️ ${resultadoHorario.motivo}`);
+        return;
+    }
+
+    // ✅ VERIFICA SE O HORÁRIO JÁ PASSOU (apenas para hoje)
     const hoje = new Date();
     const dataSelecionada = new Date(data + 'T' + horario);
     const agora = new Date();
