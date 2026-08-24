@@ -122,6 +122,45 @@ function verificarHorarioDisponivel(data, horario) {
 }
 
 // ============================================================
+// FUNÇÃO PARA ATUALIZAR O STATUS DA LOJA NO HEADER
+// ============================================================
+
+function atualizarStatusLoja() {
+    console.log("🔄 Atualizando status da loja...");
+    
+    const statusBadge = document.querySelector('.status-badge');
+    if (!statusBadge) {
+        console.warn("⚠️ Elemento .status-badge não encontrado");
+        return;
+    }
+    
+    const status = verificarLojaAberta();
+    console.log("📊 Status da loja:", status);
+    
+    if (status.aberto) {
+        statusBadge.textContent = '🟢 Aberto agora';
+        statusBadge.className = 'status-badge online';
+        statusBadge.style.color = '#155724';
+        statusBadge.style.background = '#d4edda';
+        statusBadge.style.borderColor = '#c3e6cb';
+    } else {
+        let mensagem = '🔴 Fechado agora';
+        if (status.horario) {
+            mensagem += ` - ${status.horario.abertura} às ${status.horario.fechamento}`;
+        } else if (status.motivo) {
+            mensagem = `🔴 ${status.motivo}`;
+        }
+        statusBadge.textContent = mensagem;
+        statusBadge.className = 'status-badge offline';
+        statusBadge.style.color = '#721c24';
+        statusBadge.style.background = '#f8d7da';
+        statusBadge.style.borderColor = '#f5c6cb';
+    }
+    
+    console.log("✅ Status atualizado para:", statusBadge.textContent);
+}
+
+// ============================================================
 // FUNÇÕES AUXILIARES
 // ============================================================
 
@@ -592,6 +631,11 @@ function calcularTaxaEntrega(tipo, endereco) {
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("🚀 Inicializando delivery...");
+    
+    // Atualiza o status da loja primeiro
+    atualizarStatusLoja();
+    
+    // Inicializa os outros componentes
     renderizarProdutos();
     initFiltroCategorias();
     initNavbar();
@@ -600,6 +644,10 @@ document.addEventListener("DOMContentLoaded", function () {
     initAjuda();
     initHorarioSelects();
     atualizarCarrinhoUI();
+    
+    // Atualiza o status a cada 5 minutos
+    setInterval(atualizarStatusLoja, 300000);
+    
     console.log("✅ Delivery inicializado!");
 });
 
