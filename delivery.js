@@ -422,11 +422,11 @@ const BAIRROS_TAXA_FIXA = [
 let carrinho = [];
 let categoriaAtiva = "todos";
 let pedidoAtual = {
-    tipo: null,           // 'entrega' ou 'retirada'
-    quando: null,         // 'agora' ou 'agendado'
+    tipo: null,
+    quando: null,
     endereco: {},
     pagamento: null,
-    agendamento: null     // { data, horario, dataFormatada }
+    agendamento: null
 };
 
 
@@ -485,7 +485,6 @@ function initHorarioSelects() {
     const selectTarde = document.getElementById("agendamentoHorarioTarde");
     const dateInput = document.getElementById("agendamentoData");
     
-    // Validação de domingo no input de data
     if (dateInput) {
         dateInput.removeEventListener("change", handleDateChange);
         dateInput.addEventListener("change", handleDateChange);
@@ -520,7 +519,6 @@ function handleDateChange(e) {
     if (diaSemana === 0) {
         alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
         input.value = "";
-        // Limpa também os horários selecionados
         const selectManha = document.getElementById("agendamentoHorario");
         const selectTarde = document.getElementById("agendamentoHorarioTarde");
         if (selectManha) {
@@ -833,7 +831,6 @@ function abrirModal() {
 function fecharModal() {
     const modal = document.getElementById("modalOverlay");
     if (modal) modal.classList.remove("active");
-    // Reset do estado quando fechar
     pedidoAtual = {
         tipo: null,
         quando: null,
@@ -879,7 +876,6 @@ function initModal() {
             console.log("📦 Forma de recebimento selecionada:", tipo);
             pedidoAtual.tipo = tipo;
             
-            // Avança para o step "Quando você precisa?"
             ocultarTodosStepsModal();
             document.getElementById("modalStepQuando").style.display = "block";
         });
@@ -893,22 +889,28 @@ function initModal() {
         btn.addEventListener("click", function () {
             const quando = this.dataset.quando;
             console.log("⏰ Quando selecionado:", quando);
+            
+            // ✅ BLOQUEIO PARA PEDIDO AGORA EM DOMINGOS
+            if (quando === "agora") {
+                const hoje = new Date();
+                const diaSemana = hoje.getDay();
+                if (diaSemana === 0) {
+                    alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione a opção de agendamento para outro dia.");
+                    return;
+                }
+            }
+            
             pedidoAtual.quando = quando;
             document.getElementById("quandoError").style.display = "none";
             
-            // Avança para o próximo step baseado no tipo
             ocultarTodosStepsModal();
             
             if (pedidoAtual.tipo === "entrega") {
-                // Se for entrega, precisa de endereço
                 document.getElementById("modalStepEndereco").style.display = "block";
             } else if (pedidoAtual.tipo === "retirada") {
-                // Se for retirada, vai direto para o agendamento ou nome
                 if (quando === "agendado") {
                     document.getElementById("modalStepAgendamento").style.display = "block";
-                    // Mostra a info de retirada
                     document.getElementById("agendamentoRetiradaInfo").style.display = "block";
-                    // Define data mínima - PERMITE HOJE
                     const dateInput = document.getElementById("agendamentoData");
                     if (dateInput) {
                         const today = new Date();
@@ -916,7 +918,6 @@ function initModal() {
                         dateInput.min = todayStr;
                     }
                 } else {
-                    // Para agora - vai direto para o nome
                     document.getElementById("modalStepNome").style.display = "block";
                 }
             }
@@ -955,7 +956,6 @@ function initModal() {
                 alert("Por favor, informe seu nome.");
                 return;
             }
-            // Salva o nome no pedido
             pedidoAtual.nome = nome;
             ocultarTodosStepsModal();
             document.getElementById("modalStepPagamento").style.display = "block";
@@ -1006,17 +1006,14 @@ function confirmarEndereco() {
         referencia: document.getElementById("modalEnderecoReferencia")?.value.trim() || ""
     };
 
-    // Calcula a taxa de entrega
     const resultadoTaxa = calcularTaxaEntrega("entrega", pedidoAtual.endereco);
     pedidoAtual.endereco.taxa = resultadoTaxa.taxa;
     pedidoAtual.endereco.textoTaxa = resultadoTaxa.texto;
     pedidoAtual.endereco.taxaCalculada = resultadoTaxa.calculado;
 
-    // Se for "agendado", vai para agendamento, senão vai para nome
     ocultarTodosStepsModal();
     if (pedidoAtual.quando === "agendado") {
         document.getElementById("modalStepAgendamento").style.display = "block";
-        // Define data mínima - PERMITE HOJE
         const dateInput = document.getElementById("agendamentoData");
         if (dateInput) {
             const today = new Date();
@@ -1040,7 +1037,6 @@ function confirmarAgendamento() {
     const horarioManha = document.getElementById("agendamentoHorario")?.value;
     const horarioTarde = document.getElementById("agendamentoHorarioTarde")?.value;
     
-    // Validação: apenas um horário
     let horario = "";
     let erroHorario = false;
     
@@ -1062,7 +1058,6 @@ function confirmarAgendamento() {
         return;
     }
     
-    // Reseta bordas
     const selectManha = document.getElementById("agendamentoHorario");
     const selectTarde = document.getElementById("agendamentoHorarioTarde");
     if (selectManha) selectManha.style.borderColor = "";
@@ -1073,21 +1068,20 @@ function confirmarAgendamento() {
         return;
     }
 
-    // VALIDAÇÃO: BLOQUEAR DOMINGOS
+    // ✅ BLOQUEIO DE DOMINGO NO AGENDAMENTO
     const dataObj = new Date(data + 'T' + horario);
-    const diaSemana = dataObj.getDay(); // 0 = domingo
+    const diaSemana = dataObj.getDay();
     
     if (diaSemana === 0) {
         alert("⚠️ A Le' Gust Salgaderia não funciona aos domingos. Por favor, selecione outro dia.");
         return;
     }
 
-    // VALIDAÇÃO: HORÁRIOS PASSADOS (apenas para hoje)
+    // ✅ BLOQUEIO DE HORÁRIOS PASSADOS (apenas para hoje)
     const hoje = new Date();
     const dataSelecionada = new Date(data + 'T' + horario);
     const agora = new Date();
     
-    // Se for hoje, verifica se o horário já passou
     if (dataSelecionada.toDateString() === hoje.toDateString()) {
         const horaSelecionada = dataSelecionada.getHours();
         const minutoSelecionado = dataSelecionada.getMinutes();
@@ -1100,7 +1094,6 @@ function confirmarAgendamento() {
         }
     }
     
-    // Formata a data
     const dataFormatada = new Date(data + 'T' + horario).toLocaleString('pt-BR', {
         day: '2-digit',
         month: '2-digit',
@@ -1117,7 +1110,6 @@ function confirmarAgendamento() {
     
     console.log("📅 Agendamento salvo:", pedidoAtual.agendamento);
     
-    // Avança para o nome
     ocultarTodosStepsModal();
     document.getElementById("modalStepNome").style.display = "block";
 }
@@ -1170,7 +1162,6 @@ function criarBotaoFinalizar() {
 function mostrarResumoPedido() {
     console.log("📋 Gerando resumo do pedido...");
     
-    // Verifica se tem nome
     if (!pedidoAtual.nome) {
         alert("Por favor, informe seu nome.");
         return;
@@ -1193,7 +1184,6 @@ function mostrarResumoPedido() {
     let tipoEntregaTexto = "";
     let quandoTexto = "";
 
-    // Determina o tipo de entrega
     if (pedidoAtual.tipo === "entrega") {
         tipoEntregaTexto = "🛵 Entrega em casa";
         if (pedidoAtual.endereco && pedidoAtual.endereco.taxa !== undefined) {
@@ -1208,7 +1198,6 @@ function mostrarResumoPedido() {
         taxaCalculada = true;
     }
 
-    // Determina quando
     if (pedidoAtual.quando === "agora") {
         quandoTexto = "⚡ AGORA";
     } else if (pedidoAtual.quando === "agendado") {
@@ -1230,15 +1219,12 @@ function mostrarResumoPedido() {
         modalContent.appendChild(step);
     }
 
-    // Determina a classe de destaque para o pedido
     const isAgendado = pedidoAtual.quando === "agendado";
-    const destaqueClass = isAgendado ? 'agendado' : 'imediato';
 
     step.innerHTML = `
         <h3>📋 Finalizar Pedido</h3>
         <p style="color:var(--text-light); margin-bottom:18px;">Confira os dados do seu pedido antes de enviar.</p>
 
-        <!-- STATUS DO PEDIDO (DESTAQUE) -->
         <div style="margin-bottom:15px; padding:15px; border-radius:8px; text-align:center; ${isAgendado ? 'background:#fff3cd; border:2px solid #ffc107;' : 'background:#d4edda; border:2px solid #28a745;'}">
             <strong style="font-size:1.1rem; ${isAgendado ? 'color:#856404;' : 'color:#155724;'}">
                 ${isAgendado ? '📅 PEDIDO AGENDADO' : '⚡ PEDIDO IMEDIATO'}
@@ -1248,25 +1234,21 @@ function mostrarResumoPedido() {
             </p>
         </div>
 
-        <!-- NOME -->
         <div style="margin-bottom:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
             <strong>👤 Cliente</strong>
             <p style="margin:5px 0 0;">${pedidoAtual.nome}</p>
         </div>
 
-        <!-- TIPO DE ENTREGA -->
         <div style="margin-bottom:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
             <strong>📦 Recebimento</strong>
             <p style="margin:5px 0 0;">${tipoEntregaTexto}</p>
         </div>
 
-        <!-- QUANDO -->
         <div style="margin-bottom:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
             <strong>⏰ Quando</strong>
             <p style="margin:5px 0 0;">${quandoTexto}</p>
         </div>
 
-        <!-- ITENS -->
         <div class="resumo-section">
             <strong>🛒 Itens do pedido</strong>
             ${carrinho.map(item => {
@@ -1284,7 +1266,6 @@ function mostrarResumoPedido() {
             }).join("")}
         </div>
 
-        <!-- VALORES -->
         <div style="margin-top:15px; padding:15px; background:#f8f8f8; border-radius:10px;">
             <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
                 <span>Subtotal</span>
@@ -1306,7 +1287,6 @@ function mostrarResumoPedido() {
             </div>
         ` : ""}
 
-        <!-- PAGAMENTO -->
         <div style="margin-top:15px; padding:12px; border-radius:8px; background:#f8f8f8;">
             <strong>💳 Forma de pagamento</strong>
             <p style="margin:5px 0 0;">${pedidoAtual.pagamento}</p>
@@ -1337,7 +1317,6 @@ function mostrarResumoPedido() {
     ocultarTodosStepsModal();
     step.style.display = "block";
 
-    // VOLTAR
     const btnVoltar = document.getElementById("btnVoltarResumo");
     if (btnVoltar) {
         btnVoltar.addEventListener("click", function () {
@@ -1347,7 +1326,6 @@ function mostrarResumoPedido() {
         });
     }
 
-    // WHATSAPP
     const btnWhatsApp = document.getElementById("btnConfirmarWhatsApp");
     if (btnWhatsApp) {
         btnWhatsApp.addEventListener("click", confirmarEEnviarPedido);
@@ -1377,7 +1355,6 @@ function confirmarEEnviarPedido() {
         return;
     }
 
-    // Determina o status do pedido
     const isAgendado = pedidoAtual.quando === "agendado";
     const statusTexto = isAgendado ? "AGENDADO" : "IMEDIATO";
     const quandoTexto = isAgendado 
@@ -1398,7 +1375,6 @@ function confirmarEEnviarPedido() {
         message += `• ${item.qtd}x ${item.nome} = R$ ${subtotal.toFixed(2).replace(".", ",")}\n`;
     });
 
-    // Calcula a taxa
     let taxa = 0;
     let textoTaxa = "R$ 0,00";
     let taxaCalculada = true;
@@ -1417,7 +1393,6 @@ function confirmarEEnviarPedido() {
     message += ` *TAXA DE ENTREGA:* ${textoTaxa}\n`;
     message += ` *TOTAL:* R$ ${totalFinal.toFixed(2).replace(".", ",")}\n\n`;
 
-    // INFORMAÇÕES DO PEDIDO
     message += ` *RECEBIMENTO:* ${pedidoAtual.tipo === "entrega" ? "ENTREGA EM CASA" : "RETIRADA NA LOJA"}\n`;
 
     if (pedidoAtual.tipo === "entrega") {
