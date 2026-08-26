@@ -18,12 +18,12 @@ const CONFIG_ENV = window.CONFIG || {
 const HORARIO_FUNCIONAMENTO = {
     dias: {
         0: { aberto: false },
-        1: { aberto: true, abertura: "08:00", fechamento: "18:00" },
-        2: { aberto: true, abertura: "08:00", fechamento: "18:00" },
-        3: { aberto: true, abertura: "08:00", fechamento: "18:00" },
-        4: { aberto: true, abertura: "08:00", fechamento: "18:00" },
-        5: { aberto: true, abertura: "08:00", fechamento: "18:00" },
-        6: { aberto: true, abertura: "08:00", fechamento: "18:00" }
+        1: { aberto: true, abertura: "08:00", fechamento: "19:00" },
+        2: { aberto: true, abertura: "08:00", fechamento: "19:00" },
+        3: { aberto: true, abertura: "08:00", fechamento: "19:00" },
+        4: { aberto: true, abertura: "08:00", fechamento: "19:00" },
+        5: { aberto: true, abertura: "08:00", fechamento: "19:00" },
+        6: { aberto: true, abertura: "08:00", fechamento: "19:00" }
     }
 };
 
